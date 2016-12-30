@@ -1,1 +1,1 @@
-# salgan-cvpr-2017
+# saliency-salgan-2017
