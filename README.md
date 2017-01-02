@@ -97,14 +97,14 @@ SalGAN Architecture
 As explained in our paper, our networks were trained on the training and validation data provided by [SALICON](http://salicon.net/).
 
 ### Test
-Three different dataset were used for test:
+Two different dataset were used for test:
 * Test partition of [SALICON](http://salicon.net/) dataset.
 * [MIT300](http://saliency.mit.edu/datasets.html).
 
 
 ## Software frameworks
 
-Our paper presents two different convolutional neural networks trained with different frameworks. For this reason, different instructions and source code folders are provided.
+Our paper presents two convolutional neural networks, one correspends to the Generator (Saliency Prediction Network) and the another is the Discriminator for the adversarial training. To compute saliency maps only the Generator is needed.
 
 ### SalGAN on Lasagne
 
