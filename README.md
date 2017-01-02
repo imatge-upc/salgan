@@ -22,9 +22,9 @@
 
 A joint collaboration between:
 
-| ![logo-insight] | ![logo-dcu] | ![logo-microsoft] |![logo-bsc] |![logo-upc] | ![logo-etsetb] | ![logo-gpi] |
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web]|[Barcelona Supercomputing Center][bsc-web] |[Universitat Politecnica de Catalunya (UPC)][upc-web]   | [UPC ETSETB TelecomBCN][etsetb-web]  | [UPC Image Processing Group][gpi-web] |
+| ![logo-insight] | ![logo-dcu] | ![logo-microsoft] |![logo-bsc] | ![logo-gpi] |
+|:-:|:-:|:-:|:-:|:-:|
+| [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web]|[Barcelona Supercomputing Center][bsc-web] | [UPC Image Processing Group][gpi-web] |
 
 [insight-web]: https://www.insight-centre.org/ 
 [dcu-web]: http://www.dcu.ie/
