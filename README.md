@@ -108,8 +108,7 @@ Our paper presents two convolutional neural networks, one correspends to the Gen
 
 ### SalGAN on Lasagne
 
-The shallow network is implemented in [Lasagne](https://github.com/Lasagne/Lasagne), which at its time is developed over [Theano](http://deeplearning.net/software/theano/).
-Please downlaod the latest version of [Lasagne](https://github.com/Lasagne/Lasagne) and [Theano](http://deeplearning.net/software/theano/).
+SalGAN is implemented in [Lasagne](https://github.com/Lasagne/Lasagne), which at its time is developed over [Theano](http://deeplearning.net/software/theano/).
 ```
 pip install -r https://github.com/imatge-upc/saliency-salgan-2017/blob/junting/requirements.txt
 ```
