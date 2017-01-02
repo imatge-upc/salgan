@@ -1,8 +1,8 @@
 # SalGAN: Visual Saliency Prediction with Generative Adversarial Networks
 
 | ![Junting Pan][JuntingPan-photo]  | ![Cristian Canton][CristianCanton-photo]  |  ![Kevin McGuinness][KevinMcGuinness-photo] | ![Noel O'Connor][NoelOConnor-photo]   | ![Jordi Torres][JordiTorres-photo] |![Elisa Sayrol][ElisaSayrol-photo]  | ![Xavier Giro-i-Nieto][XavierGiro-photo]  |
-|:-:|:-:|:-:|:-:|:-:|
-| [Junting Pan][JuntingPan-web]  | [Cristian Canton][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web]  |  [Elisa Sayrol][ElisaSayrol-web] | [Noel O'Connor][NoelOConnor-web]   | [Xavier Giro-i-Nieto][XavierGiro-web]   |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| [Junting Pan][JuntingPan-web]  | [Cristian Canton][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web]  |  [Jordi Torres][JordiTorres-web] | [Noel O'Connor][NoelOConnor-web] |[Elisa Sayrol][ElisaSayrol-web]  | [Xavier Giro-i-Nieto][XavierGiro-web]   |
 
 [JuntingPan-web]: https://www.linkedin.com/in/junting-pan
 [CristianCanton-web]: https://cristiancanton.github.io/
@@ -23,7 +23,7 @@
 A joint collaboration between:
 
 | ![logo-insight] | ![logo-dcu] | ![logo-microsoft] | ![logo-upc] | ![logo-etsetb] | ![logo-gpi] |
-|:-:|:-:|:-:|:-:|:-:|
+|:-:|:-:|:-:|:-:|:-:|:-:|
 | [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web] |[Universitat Politecnica de Catalunya (UPC)][upc-web]   | [UPC ETSETB TelecomBCN][etsetb-web]  | [UPC Image Processing Group][gpi-web] |
 
 [insight-web]: https://www.insight-centre.org/ 
@@ -74,10 +74,10 @@ You may also want to refer to our publication with the more human-friendly Chica
 The SalGAN presented in our work can be downloaded from the links provided below the figure:
 
 SalGAN Architecture
-|:-:|
-|  ![architecture-fig] |
-! [[SalGAN Generator Model (2.5 GB)]](https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/shallow_net.pickle)
-! [[SalGAN Discriminator (99 MB)]](https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/deep_net_model.caffemodel)
+![architecture-fig]
+
+[[SalGAN Generator Model (2.5 GB)]](https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/shallow_net.pickle)
+[[SalGAN Discriminator (99 MB)]](https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/deep_net_model.caffemodel)
 
 [architecture-fig]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/figs/fullarchitecture.jpg?token=AFOjyaH8cuBFWpldWWzo_TKVB-zekfxrks5Yc4NQwA%3D%3D "SALGAN architecture"
 [shallow-model]: https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/shallow_net.pickle
