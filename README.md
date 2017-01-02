@@ -13,7 +13,7 @@
 [XavierGiro-web]: https://imatge.upc.edu/web/people/xavier-giro
 
 [JuntingPan-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/authors/JuntingPan.jpg "Junting Pan"
-[KevinMcGuinness-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/authors/KevinMcGuinness.jpg "Kevin McGuinness"
+[KevinMcGuinness-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/authors/Kevin160x160%202.jpg?token=AFOjyZmLlX3ZgpkNe60Vn3ruTsq01rD9ks5YdAaiwA%3D%3D "Kevin McGuinness"
 [CristianCanton-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/authors/CristianCanton.jpg?token=AFOjyS9qMOnUPVLZpqN80ChO0R-x0SI5ks5Yc3qJwA%3D%3D "Cristian Canton"
 [JordiTorres-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/authors/JordiTorres.jpg?token=AFOjyUaOhEyX2MGayU2C4tExpQeT0jFUks5Yc3vcwA%3D%3D
 [ElisaSayrol-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/authors/ElisaSayrol.jpg "Elisa Sayrol"
