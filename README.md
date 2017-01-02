@@ -1,8 +1,8 @@
 # SalGAN: Visual Saliency Prediction with Generative Adversarial Networks
 
-| ![Junting Pan][JuntingPan-photo]  | ![Cristian Canton][CristianCanton-photo]  |  ![Kevin McGuinness][KevinMcGuinness-photo] | ![Noel O'Connor][NoelOConnor-photo]   | ![Jordi Torres][JordiTorres-photo] |![Elisa Sayrol][ElisaSayrol-photo]  | ![Xavier Giro-i-Nieto][XavierGiro-photo]  |
+| ![Junting Pan][JuntingPan-photo]  | ![Cristian Canton][CristianCanton-photo]  |  ![Kevin McGuinness][KevinMcGuinness-photo] | ![Noel O'Connor][NoelOConnor-photo] | ![Jordi Torres][JordiTorres-photo] |![Elisa Sayrol][ElisaSayrol-photo]  | ![Xavier Giro-i-Nieto][XavierGiro-photo]  |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [Junting Pan][JuntingPan-web]  | [Cristian Canton][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web]  |  [Jordi Torres][JordiTorres-web] | [Noel O'Connor][NoelOConnor-web] |[Elisa Sayrol][ElisaSayrol-web]  | [Xavier Giro-i-Nieto][XavierGiro-web]   |
+| [Junting Pan][JuntingPan-web]  | [Cristian Canton][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web] | [Noel O'Connor][NoelOConnor-web] |  [Jordi Torres][JordiTorres-web] | [Elisa Sayrol][ElisaSayrol-web]  | [Xavier Giro-i-Nieto][XavierGiro-web]   |
 
 [JuntingPan-web]: https://www.linkedin.com/in/junting-pan
 [CristianCanton-web]: https://cristiancanton.github.io/
@@ -22,13 +22,14 @@
 
 A joint collaboration between:
 
-| ![logo-insight] | ![logo-dcu] | ![logo-microsoft] | ![logo-upc] | ![logo-etsetb] | ![logo-gpi] |
-|:-:|:-:|:-:|:-:|:-:|:-:|
-| [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web] |[Universitat Politecnica de Catalunya (UPC)][upc-web]   | [UPC ETSETB TelecomBCN][etsetb-web]  | [UPC Image Processing Group][gpi-web] |
+| ![logo-insight] | ![logo-dcu] | ![logo-microsoft] |![logo-bsc] |![logo-upc] | ![logo-etsetb] | ![logo-gpi] |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web]|[Barcelona Supercomputing Center][bsc-web] |[Universitat Politecnica de Catalunya (UPC)][upc-web]   | [UPC ETSETB TelecomBCN][etsetb-web]  | [UPC Image Processing Group][gpi-web] |
 
 [insight-web]: https://www.insight-centre.org/ 
 [dcu-web]: http://www.dcu.ie/
 [microsoft-web]: https://www.microsoft.com/en-us/research/
+[bsc-web]: https://www.bsc.es/
 [upc-web]: http://www.upc.edu/?set_language=en
 [etsetb-web]: https://www.etsetb.upc.edu/en/ 
 [gpi-web]: https://imatge.upc.edu/web/ 
@@ -37,6 +38,7 @@ A joint collaboration between:
 [logo-insight]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/insight.jpg "Insight Centre for Data Analytics"
 [logo-dcu]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/dcu.png "Dublin City University"
 [logo-microsoft]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/logos/microsoft.jpg?token=AFOjyc8Q1kkjcWIP-yen0FTEo0lsWPk6ks5Yc3j4wA%3D%3D "Microsoft"
+[logo-bsc]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/logos/bsc320x86.jpg?token=AFOjyWSHWWVvzTXnYh1DiFvH2VoWykA3ks5Yc6Q1wA%3D%3D
 [logo-upc]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/upc.jpg "Universitat Politecnica de Catalunya"
 [logo-etsetb]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/etsetb.png "ETSETB TelecomBCN"
 [logo-gpi]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/gpi.png "UPC Image Processing Group"
