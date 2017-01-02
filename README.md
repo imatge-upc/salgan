@@ -1,8 +1,8 @@
 # SalGAN: Visual Saliency Prediction with Generative Adversarial Networks
 
-| ![Junting Pan][JuntingPan-photo]  | ![Cristian Canton][CristianCanton-photo]  |  ![Kevin McGuinness][KevinMcGuinness-photo] | ![Noel O'Connor][NoelOConnor-photo]   | ![Jordi Torres][JordiTorres-photo] |![Elisa Sayrol][ElisaSayrol-photo]  | ![Xavier Giro-i-Nieto][XavierGiro-photo]  |
-|:-:|:-:|:-:|:-:|:-:|
-| [Junting Pan][JuntingPan-web]  | [Cristian Canton][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web]  |  [Elisa Sayrol][ElisaSayrol-web] | [Noel O'Connor][NoelOConnor-web]   | [Xavier Giro-i-Nieto][XavierGiro-web]   |
+| ![Junting Pan][JuntingPan-photo]  | ![Cristian Canton][CristianCanton-photo]  |  ![Kevin McGuinness][KevinMcGuinness-photo] | ![Noel O'Connor][NoelOConnor-photo] | ![Jordi Torres][JordiTorres-photo] |![Elisa Sayrol][ElisaSayrol-photo]  | ![Xavier Giro-i-Nieto][XavierGiro-photo]  |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| [Junting Pan][JuntingPan-web]  | [Cristian Canton][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web] | [Noel O'Connor][NoelOConnor-web] |  [Jordi Torres][JordiTorres-web] | [Elisa Sayrol][ElisaSayrol-web]  | [Xavier Giro-i-Nieto][XavierGiro-web]   |
 
 [JuntingPan-web]: https://www.linkedin.com/in/junting-pan
 [CristianCanton-web]: https://cristiancanton.github.io/
@@ -13,7 +13,7 @@
 [XavierGiro-web]: https://imatge.upc.edu/web/people/xavier-giro
 
 [JuntingPan-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/authors/JuntingPan.jpg "Junting Pan"
-[KevinMcGuinness-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/authors/KevinMcGuinness.jpg "Kevin McGuinness"
+[KevinMcGuinness-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/authors/Kevin160x160%202.jpg?token=AFOjyZmLlX3ZgpkNe60Vn3ruTsq01rD9ks5YdAaiwA%3D%3D "Kevin McGuinness"
 [CristianCanton-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/authors/CristianCanton.jpg?token=AFOjyS9qMOnUPVLZpqN80ChO0R-x0SI5ks5Yc3qJwA%3D%3D "Cristian Canton"
 [JordiTorres-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/authors/JordiTorres.jpg?token=AFOjyUaOhEyX2MGayU2C4tExpQeT0jFUks5Yc3vcwA%3D%3D
 [ElisaSayrol-photo]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/authors/ElisaSayrol.jpg "Elisa Sayrol"
@@ -22,13 +22,14 @@
 
 A joint collaboration between:
 
-| ![logo-insight] | ![logo-dcu] | ![logo-microsoft] | ![logo-upc] | ![logo-etsetb] | ![logo-gpi] |
+| ![logo-insight] | ![logo-dcu] | ![logo-microsoft] |![logo-bsc] | ![logo-gpi] |
 |:-:|:-:|:-:|:-:|:-:|
-| [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web] |[Universitat Politecnica de Catalunya (UPC)][upc-web]   | [UPC ETSETB TelecomBCN][etsetb-web]  | [UPC Image Processing Group][gpi-web] |
+| [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web]|[Barcelona Supercomputing Center][bsc-web] | [UPC Image Processing Group][gpi-web] |
 
 [insight-web]: https://www.insight-centre.org/ 
 [dcu-web]: http://www.dcu.ie/
 [microsoft-web]: https://www.microsoft.com/en-us/research/
+[bsc-web]: https://www.bsc.es/
 [upc-web]: http://www.upc.edu/?set_language=en
 [etsetb-web]: https://www.etsetb.upc.edu/en/ 
 [gpi-web]: https://imatge.upc.edu/web/ 
@@ -37,6 +38,7 @@ A joint collaboration between:
 [logo-insight]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/insight.jpg "Insight Centre for Data Analytics"
 [logo-dcu]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/dcu.png "Dublin City University"
 [logo-microsoft]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/logos/microsoft.jpg?token=AFOjyc8Q1kkjcWIP-yen0FTEo0lsWPk6ks5Yc3j4wA%3D%3D "Microsoft"
+[logo-bsc]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/logos/bsc320x86.jpg?token=AFOjyWSHWWVvzTXnYh1DiFvH2VoWykA3ks5Yc6Q1wA%3D%3D
 [logo-upc]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/upc.jpg "Universitat Politecnica de Catalunya"
 [logo-etsetb]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/etsetb.png "ETSETB TelecomBCN"
 [logo-gpi]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/gpi.png "UPC Image Processing Group"
@@ -67,17 +69,17 @@ year = {2016}
 
 You may also want to refer to our publication with the more human-friendly Chicago style:
 
-*Junting Pan, Cristian Canton, Kevin McGuinness, Noel E. O'Connor, Jordi Torres, Elisa Sayrol and Xavier Giro-i-Nieto. "SalGAN: Visual Saliency Prediction with Generative Adversarial Networks." arxiv. 2017.*
+*Junting Pan, Cristian Canton, Kevin McGuinness, Noel E. O'Connor, Jordi Torres, Elisa Sayrol and Xavier Giro-i-Nieto. "SalGAN: Visual Saliency Prediction with Generative Adversarial Networks." arXiv. 2017.*
 
 ## Models
 
 The SalGAN presented in our work can be downloaded from the links provided below the figure:
 
 SalGAN Architecture
-|:-:|
-|  ![architecture-fig] |
-! [[SalGAN Generator Model (2.5 GB)]](https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/shallow_net.pickle)
-! [[SalGAN Discriminator (99 MB)]](https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/deep_net_model.caffemodel)
+![architecture-fig]
+
+[[SalGAN Generator Model (127 MB)]](https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/shallow_net.pickle)
+[[SalGAN Discriminator (3.4 MB)]](https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/deep_net_model.caffemodel)
 
 [architecture-fig]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/figs/fullarchitecture.jpg?token=AFOjyaH8cuBFWpldWWzo_TKVB-zekfxrks5Yc4NQwA%3D%3D "SALGAN architecture"
 [shallow-model]: https://imatge.upc.edu/web/sites/default/files/resources/1720/saliency/2016-cvpr/shallow_net.pickle
@@ -95,19 +97,18 @@ SalGAN Architecture
 As explained in our paper, our networks were trained on the training and validation data provided by [SALICON](http://salicon.net/).
 
 ### Test
-Three different dataset were used for test:
+Two different dataset were used for test:
 * Test partition of [SALICON](http://salicon.net/) dataset.
 * [MIT300](http://saliency.mit.edu/datasets.html).
 
 
 ## Software frameworks
 
-Our paper presents two different convolutional neural networks trained with different frameworks. For this reason, different instructions and source code folders are provided.
+Our paper presents two convolutional neural networks, one correspends to the Generator (Saliency Prediction Network) and the another is the Discriminator for the adversarial training. To compute saliency maps only the Generator is needed.
 
 ### SalGAN on Lasagne
 
-The shallow network is implemented in [Lasagne](https://github.com/Lasagne/Lasagne), which at its time is developed over [Theano](http://deeplearning.net/software/theano/).
-Please downlaod the latest version of [Lasagne](https://github.com/Lasagne/Lasagne) and [Theano](http://deeplearning.net/software/theano/).
+SalGAN is implemented in [Lasagne](https://github.com/Lasagne/Lasagne), which at its time is developed over [Theano](http://deeplearning.net/software/theano/).
 ```
 pip install -r https://github.com/imatge-upc/saliency-salgan-2017/blob/junting/requirements.txt
 ```
