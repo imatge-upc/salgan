@@ -71,6 +71,10 @@ You may also want to refer to our publication with the more human-friendly Chica
 
 *Junting Pan, Cristian Canton, Kevin McGuinness, Noel E. O'Connor, Jordi Torres, Elisa Sayrol and Xavier Giro-i-Nieto. "SalGAN: Visual Saliency Prediction with Generative Adversarial Networks." arXiv. 2017.*
 
+## Slides
+
+<iframe src="//www.slideshare.net/slideshow/embed_code/key/5cXl80Fm2c3ksg" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/xavigiro/salgan-visual-saliency-prediction-with-generative-adversarial-networks" title="SalGAN: Visual Saliency Prediction with Generative Adversarial Networks" target="_blank">SalGAN: Visual Saliency Prediction with Generative Adversarial Networks</a> </strong> from <strong><a target="_blank" href="//www.slideshare.net/xavigiro">Xavier Giro</a></strong> </div>
+
 ## Models
 
 The SalGAN presented in our work can be downloaded from the links provided below the figure:
