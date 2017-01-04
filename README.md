@@ -58,12 +58,12 @@ An [arXiv pre-print](http://arxiv.org/abs/1603.00845) of our work is  available.
 Please cite with the following Bibtex code:
 
 ```
-@InProceedings{Pan_2016_CVPR,
-author = {Pan, Junting and Sayrol, Elisa and Giro-i-Nieto, Xavier and McGuinness, Kevin and O'Connor, Noel E.},
-title = {Shallow and Deep Convolutional Networks for Saliency Prediction},
-booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-month = {June},
-year = {2016}
+@InProceedings{Pan_2017_SalGAN,
+author = {Pan, Junting and Canton, Cristian and McGuinness, Kevin and O'Connor, Noel E. and Torres, Jordi and Sayrol, Elisa and Giro-i-Nieto, Xavier and},
+title = {SalGAN: Visual Saliency Prediction with Generative Adversarial Networks},
+booktitle = {arXiv},
+month = {January},
+year = {2017}
 }
 ```
 
