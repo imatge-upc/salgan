@@ -2,7 +2,7 @@
 
 | ![Junting Pan][JuntingPan-photo]  | ![Cristian Canton Ferrer][CristianCanton-photo]  |  ![Kevin McGuinness][KevinMcGuinness-photo] | ![Noel O'Connor][NoelOConnor-photo] | ![Jordi Torres][JordiTorres-photo] |![Elisa Sayrol][ElisaSayrol-photo]  | ![Xavier Giro-i-Nieto][XavierGiro-photo]  |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [Junting Pan][JuntingPan-web]  | [Cristian Canton][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web] | [Noel O'Connor][NoelOConnor-web] |  [Jordi Torres][JordiTorres-web] | [Elisa Sayrol][ElisaSayrol-web]  | [Xavier Giro-i-Nieto][XavierGiro-web]   |
+| [Junting Pan][JuntingPan-web]  | [Cristian Canton Ferrer][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web] | [Noel O'Connor][NoelOConnor-web] |  [Jordi Torres][JordiTorres-web] | [Elisa Sayrol][ElisaSayrol-web]  | [Xavier Giro-i-Nieto][XavierGiro-web]   |
 
 [JuntingPan-web]: https://www.linkedin.com/in/junting-pan
 [CristianCanton-web]: https://cristiancanton.github.io/
