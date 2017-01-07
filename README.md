@@ -132,6 +132,7 @@ In order to run the test script to predict saliency maps, you can run the follow
 THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32,lib.cnmem=1,optimizer_including=cudnn python 03-predict.py
 ```
 With the provided model weights you should obtain the follwing result:
+
 | ![Image Stimuli]  | ![Saliency Map]  |
 |:-:|:-:|
 
