@@ -10,7 +10,7 @@ from model import Model
 
 
 class ModelSALGAN(Model):
-    def __init__(self, w, h, batch_size, G_lr=3e-4, D_lr=3e-4, alpha=1/20.):
+    def __init__(self, w, h, batch_size=32, G_lr=3e-4, D_lr=3e-4, alpha=1/20.):
         super(ModelSALGAN, self).__init__(w, h, batch_size)
 
         # Build Generator
