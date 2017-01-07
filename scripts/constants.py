@@ -1,5 +1,5 @@
 # Work space directory
-HOME_DIR = '/home/users/jpang/scratch-local/lsun2016/salgan-cvpr-2017/'
+HOME_DIR = '/imatge/jpan/saliency-salgan-2017/'
 
 # Path to SALICON raw data
 pathToImages = '/home/users/jpang/salicon_data/images'
@@ -17,7 +17,7 @@ VAL_DATA_DIR = '/home/users/jpang/scratch-local/salicon_data/320x240/fix_validat
 TEST_DATA_DIR = '/home/users/jpang/scratch-local/salicon_data/256x192/testData.pickle'
 
 # Path to vgg16 pre-trained weights
-PATH_TO_VGG16_WEIGHTS = '/scratch/local/jpang/vgg16.pkl'
+PATH_TO_VGG16_WEIGHTS = '/imatge/jpan/saliency-salgan-2017/vgg16.pkl'
 
 # Input image and saliency map size
 INPUT_SIZE = (320, 240)

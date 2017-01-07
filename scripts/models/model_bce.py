@@ -9,7 +9,7 @@ from model import Model
 
 
 class ModelBCE(Model):
-    def __init__(self, w, h, batch_size, lr=0.001):
+    def __init__(self, w, h, batch_size=32, lr=0.001):
         super(ModelBCE, self).__init__(w, h, batch_size)
 
         self.net = generator.build(self.inputHeight, self.inputWidth, self.input_var)

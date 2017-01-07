@@ -25,7 +25,7 @@ def bce_batch_iterator(model, train_data, validation_sample):
     num_epochs = 301
     n_updates = 1
     nr_batches_train = int(len(train_data) / model.batch_size)
-    for currEpoch in tqdm(range(num_epochs), ncols=20):
+    for current_epoch in tqdm(range(num_epochs), ncols=20):
         e_cost = 0.
 
         random.shuffle(train_data)
@@ -49,19 +49,19 @@ def bce_batch_iterator(model, train_data, validation_sample):
 
         e_cost /= nr_batches_train
 
-        print 'Epoch:', currEpoch, ' train_loss->', e_cost
+        print 'Epoch:', current_epoch, ' train_loss->', e_cost
 
-        if currEpoch % 5 == 0:
-            np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(currEpoch),
+        if current_epoch % 5 == 0:
+            np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
-            predict(model=model, image_stimuli=validation_sample, numEpoch=currEpoch, pathOutputMaps=DIR_TO_SAVE)
+            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=DIR_TO_SAVE)
 
 
 def salgan_batch_iterator(model, train_data, validation_sample):
     num_epochs = 301
     nr_batches_train = int(len(train_data) / model.batch_size)
     n_updates = 1
-    for currEpoch in tqdm(range(num_epochs), ncols=20):
+    for current_epoch in tqdm(range(num_epochs), ncols=20):
 
         g_cost = 0.
         d_cost = 0.
@@ -99,13 +99,13 @@ def salgan_batch_iterator(model, train_data, validation_sample):
         e_cost /= nr_batches_train
 
         # Save weights every 3 epoch
-        if currEpoch % 3 == 0:
-            np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(currEpoch),
+        if current_epoch % 3 == 0:
+            np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
-            np.savez('./' + DIR_TO_SAVE + '/disrim_modelWeights{:04d}.npz'.format(currEpoch),
+            np.savez('./' + DIR_TO_SAVE + '/disrim_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.discriminator['fc5']))
-            predict(model=model, image_stimuli=validation_sample, numEpoch=currEpoch, pathOutputMaps=DIR_TO_SAVE)
-        print 'Epoch:', currEpoch, ' train_loss->', (g_cost, d_cost, e_cost)
+            predict(model=model, image_stimuli=validation_sample, numEpoch=current_epoch, pathOutputMaps=DIR_TO_SAVE)
+        print 'Epoch:', current_epoch, ' train_loss->', (g_cost, d_cost, e_cost)
 
 
 def train():
@@ -136,14 +136,14 @@ def train():
     # Create network
 
     if flag == 'salgan':
-        model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1], batch_size=8)
+        model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1])
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path="nss/gen_", epochtoload=15)
         # load_weights(net=model.discriminator['fc5'], path="test_dialted/disrim_", epochtoload=54)
         salgan_batch_iterator(model, train_data, validation_sample.image.data)
 
     elif flag == 'bce':
-        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1], batch_size=8)
+        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1])
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path='test/gen_', epochtoload=15)
         bce_batch_iterator(model, train_data, validation_sample.image.data)
