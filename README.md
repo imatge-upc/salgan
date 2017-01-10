@@ -59,7 +59,7 @@ The first stage of the network consists of a generator model whose weights are l
 
 Find the pre-print version of our work on [arXiv](https://arxiv.org/abs/1701.01081).
 
-![Image of the paper](https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/figs/paper.jpg)
+![Image of the paper](https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/master/figs/thumbnails.jpg)
 
 Please cite with the following Bibtex code:
 
