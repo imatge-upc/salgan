@@ -1,9 +1,7 @@
 *.npz
 *.pkl
-<<<<<<< HEAD
 *.pyc
 *.png
 *.jpg
 *.jpeg
-=======
->>>>>>> 8010ff90b1174a82569eb562fcd40bddb0c98cbb
+
