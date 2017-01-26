@@ -115,8 +115,8 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open('../saliency-2016-lsun/validationSample240x320.pkl', 'rb') as f:
-    # with open(TRAIN_DATA_DIR, 'rb') as f:
+    # with open('../saliency-2016-lsun/trainSample240x320.pkl', 'rb') as f:
+    with open(TRAIN_DATA_DIR, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 

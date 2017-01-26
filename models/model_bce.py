@@ -9,7 +9,7 @@ from model import Model
 
 
 class ModelBCE(Model):
-    def __init__(self, w, h, batch_size, lr=0.001):
+    def __init__(self, w, h, batch_size, lr=0.003):
         super(ModelBCE, self).__init__(w, h, batch_size)
 
         self.net = generator.build(self.inputHeight, self.inputWidth, self.input_var)
@@ -22,6 +22,9 @@ class ModelBCE(Model):
 
         output_var_pooled = T.signal.pool.pool_2d(self.output_var, (4, 4), mode="average_exc_pad", ignore_border=True)
         prediction_pooled = T.signal.pool.pool_2d(prediction, (4, 4), mode="average_exc_pad", ignore_border=True)
+        # ResNet-50
+        # output_var_pooled = T.signal.pool.pool_2d(self.output_var, (4, 4), mode="average_exc_pad", ignore_border=True)
+        # prediction_pooled = prediction
 
         bce = lasagne.objectives.binary_crossentropy(prediction_pooled, output_var_pooled).mean()
         train_err = bce

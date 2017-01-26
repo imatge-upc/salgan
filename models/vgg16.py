@@ -7,9 +7,10 @@ from lasagne.layers import Conv2DLayer as ConvLayer
 from lasagne.layers import Pool2DLayer as PoolLayer
 from lasagne.layers import InputLayer
 from layers import RGBtoBGRLayer
+import numpy as np
 
 
-def build(inputHeight, inputWidth, input_var):
+def build(inputHeight, inputWidth, input_var, mean_img=np.array([103.939, 116.779, 123.68])):
     """
     Bulid only Convolutional part of the VGG-16 Layer model, all fully connected layers are removed.
     First 3 group of ConvLayers are fixed (not trainable).
@@ -21,7 +22,7 @@ def build(inputHeight, inputWidth, input_var):
     net = {'input': InputLayer((None, 3, inputHeight, inputWidth), input_var=input_var)}
     print "Input: {}".format(net['input'].output_shape[1:])
 
-    net['bgr'] = RGBtoBGRLayer(net['input'])
+    net['bgr'] = RGBtoBGRLayer(net['input'], bgr_mean=mean_img)
 
     net['conv1_1'] = ConvLayer(net['bgr'], 64, 3, pad=1, flip_filters=False)
     net['conv1_1'].add_param(net['conv1_1'].W, net['conv1_1'].W.get_value().shape, trainable=False)
