@@ -9,9 +9,15 @@ import discriminator
 from model import Model
 
 
+<<<<<<< HEAD:models/model_salgan.py
 class ModelSALGAN (Model):
     def __init__(self, w, h, batch_size, G_lr=3e-4, D_lr=3e-4, alpha=1 / 20.):
         super (ModelSALGAN, self).__init__ (w, h, batch_size)
+=======
+class ModelSALGAN(Model):
+    def __init__(self, w, h, batch_size=32, G_lr=3e-4, D_lr=3e-4, alpha=1/20.):
+        super(ModelSALGAN, self).__init__(w, h, batch_size)
+>>>>>>> 8010ff90b1174a82569eb562fcd40bddb0c98cbb:scripts/models/model_salgan.py
 
         # Build Generator
         self.net = generator.build (self.inputHeight, self.inputWidth, self.input_var)
