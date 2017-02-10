@@ -20,7 +20,7 @@ TEST_DATA_DIR = '/home/users/jpang/scratch-local/salicon_data/256x192/testData.p
 PATH_TO_VGG16_WEIGHTS = '/imatge/jpan/saliency-salgan-2017/vgg16.pkl'
 
 # Input image and saliency map size
-INPUT_SIZE = (320, 240)
+INPUT_SIZE = (256, 192)
 
 # Directory to keep snapshots
 DIR_TO_SAVE = 'test'
