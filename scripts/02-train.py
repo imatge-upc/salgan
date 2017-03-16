@@ -11,6 +11,7 @@ import cv2
 import theano
 import theano.tensor as T
 import lasagne
+import pdb
 
 from tqdm import tqdm
 from constants import *
@@ -22,7 +23,7 @@ flag = str(sys.argv[1])
 
 
 def bce_batch_iterator(model, train_data, validation_sample):
-    num_epochs = 301
+    num_epochs = 500
     n_updates = 1
     nr_batches_train = int(len(train_data) / model.batch_size)
     for current_epoch in tqdm(range(num_epochs), ncols=20):
@@ -58,7 +59,7 @@ def bce_batch_iterator(model, train_data, validation_sample):
 
 
 def salgan_batch_iterator(model, train_data, validation_sample):
-    num_epochs = 301
+    num_epochs = 100
     nr_batches_train = int(len(train_data) / model.batch_size)
     n_updates = 1
     for current_epoch in tqdm(range(num_epochs), ncols=20):
@@ -99,12 +100,12 @@ def salgan_batch_iterator(model, train_data, validation_sample):
         e_cost /= nr_batches_train
 
         # Save weights every 3 epoch
-        if current_epoch % 3 == 0:
+        if current_epoch % 5  == 0:
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
             np.savez('./' + DIR_TO_SAVE + '/disrim_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.discriminator['fc5']))
-            predict(model=model, image_stimuli=validation_sample, numEpoch=current_epoch, pathOutputMaps=DIR_TO_SAVE)
+            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=DIR_TO_SAVE)
         print 'Epoch:', current_epoch, ' train_loss->', (g_cost, d_cost, e_cost)
 
 
@@ -115,13 +116,13 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open('../saliency-2016-lsun/validationSample240x320.pkl', 'rb') as f:
+    with open('/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/trainData.pickle', 'rb') as f:
     # with open(TRAIN_DATA_DIR, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
     print 'Loading validation data...'
-    with open('../saliency-2016-lsun/validationSample240x320.pkl', 'rb') as f:
+    with open('/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/validationData.pickle', 'rb') as f:
     # with open(VALIDATION_DATA_DIR, 'rb') as f:
         validation_data = pickle.load(f)
     print '-->done!'
@@ -138,7 +139,7 @@ def train():
     if flag == 'salgan':
         model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1])
         # Load a pre-trained model
-        # load_weights(net=model.net['output'], path="nss/gen_", epochtoload=15)
+        load_weights(net=model.net['output'], path="test_gen_only/gen_", epochtoload=10)
         # load_weights(net=model.discriminator['fc5'], path="test_dialted/disrim_", epochtoload=54)
         salgan_batch_iterator(model, train_data, validation_sample.image.data)
 

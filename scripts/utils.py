@@ -45,6 +45,8 @@ def predict(model, image_stimuli, num_epoch=None, name=None, path_output_maps=No
     saliency_map = cv2.GaussianBlur(saliency_map, (blur_size, blur_size), 0)
     # clip again
     saliency_map = np.clip(saliency_map, 0, 255)
+#    saliency_map = cv2.threshold(saliency_map,127,255,cv2.THRESH_BINARY)
+
     if name is None:
         # When we use for testing, there is no file name provided.
         cv2.imwrite('./' + path_output_maps + '/validationRandomSaliencyPred_{:04d}.png'.format(num_epoch), saliency_map)

@@ -5,6 +5,7 @@ from lasagne.nonlinearities import sigmoid
 import lasagne
 import cPickle
 import vgg16
+import unet
 from constants import PATH_TO_VGG16_WEIGHTS
 
 
@@ -16,8 +17,9 @@ def set_pretrained_weights(net, path_to_model_weights=PATH_TO_VGG16_WEIGHTS):
 
 
 def build_encoder(input_height, input_width, input_var):
-    encoder = vgg16.build(input_height, input_width, input_var)
-    set_pretrained_weights(encoder)
+    # encoder = vgg16.build(input_height, input_width, input_var)
+    encoder = unet.build(input_height, input_width, input_var)
+    # set_pretrained_weights(encoder)
     return encoder
 
 
@@ -81,5 +83,5 @@ def build_decoder(net):
 
 def build(input_height, input_width, input_var):
     encoder = build_encoder(input_height, input_width, input_var)
-    generator = build_decoder(encoder)
-    return generator
+    #generator = build_decoder(encoder)
+    return encoder
