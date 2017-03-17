@@ -12,7 +12,7 @@ pathOutputMaps = '/home/titan/Saeed/saliency-salgan-2017/data/mask320x240'
 pathToPickle = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240'
 
 # Path to pickles which contains processed data
-TRAIN_DATA_DIR = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/trainData.pickle'
+TRAIN_DATA_DIR = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/validationData.pickle'
 VAL_DATA_DIR = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/validationData.pickle'
 TEST_DATA_DIR = ''
 

@@ -12,6 +12,7 @@ import theano
 import theano.tensor as T
 import lasagne
 import matplotlib.pyplot as plt
+from sympy.utilities.iterables import cartes
 from tqdm import tqdm
 from constants import *
 from models.model_salgan import ModelSALGAN
@@ -22,15 +23,15 @@ import pdb
 flag = str(sys.argv[1])
 
 
-def bce_batch_iterator(model, train_data, validation_data,validation_sample):
-    num_epochs = 100
+def bce_batch_iterator(model, train_data, validation_data,validation_sample,epochs = 100, fig=False):
+    num_epochs = epochs
     n_updates = 1
     nr_batches_train = int(len(train_data) / model.batch_size)
     nr_batches_val = int(len(validation_data) / model.batch_size)
     train_loss_plt, val_loss_plt, val_acc_plt = [[] for i in range(3)]
     for current_epoch in tqdm(range(num_epochs), ncols=20):
         e_cost = 0.
-        #random.shuffle(train_data)
+        random.shuffle(train_data)
         for currChunk in chunks(train_data, model.batch_size):
             if len(currChunk) != model.batch_size:
                 continue
@@ -39,11 +40,9 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample):
             batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
                                          dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
-            # train generator with one batch and discriminator with next batch
             G_cost = model.G_trainFunction(batch_input, batch_output)
             e_cost += G_cost
             n_updates += 1
-	pdb.set_trace()
         e_cost /= nr_batches_train
 	train_loss_plt.append(e_cost)
         print '\n  train_loss->', e_cost
@@ -62,7 +61,6 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample):
             val_loss, val_binary = model.G_valFunction(batch_input,batch_output)
 	    v_cost += val_loss
 	    v_acc += val_binary
-	pdb.set_trace()
 	v_cost /= nr_batches_val
 	v_acc  /= nr_batches_val
 	val_loss_plt.append(v_cost)
@@ -72,20 +70,21 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample):
         print "  validation_acc->", v_acc
 	print("-----------------------------------------------")
         if current_epoch % 5 == 0:
-	    fig1 = plt.figure(1)
-	    plt.title("Train and Val loss")
-	    plt.xlabel("Epochs")
-	    plt.ylabel("Loss")
-    	    plt.plot(range(current_epoch+1),train_loss_plt,color='red',linestyle='-',label='Train Loss')
-    	    plt.plot(range(current_epoch+1),val_loss_plt,color='blue',linestyle='-',label='Validation Loss')
-	    plt.legend()
-	    plt.savefig('./'+DIR_TO_SAVE+'/figure1_{:04d}.png'.format(current_epoch))
-	    plt.close(fig1)
+	    if fig is True:
+	        fig1 = plt.figure(1)
+	        plt.title("Train and Val loss")
+	        plt.xlabel("Epochs")
+	        plt.ylabel("Loss")
+    	        plt.plot(range(current_epoch+1),train_loss_plt,color='red',linestyle='-',label='Train Loss')
+    	        plt.plot(range(current_epoch+1),val_loss_plt,color='blue',linestyle='-',label='Validation Loss')
+	        plt.legend()
+	        plt.savefig('./'+DIR_TO_SAVE+'/figure1_{:04d}.png'.format(current_epoch))
+	        plt.close(fig1)
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
             predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=DIR_TO_SAVE)
 
-
+    return v_acc
 def salgan_batch_iterator(model, train_data, validation_sample):
     num_epochs = 100
     nr_batches_train = int(len(train_data) / model.batch_size)
@@ -178,5 +177,24 @@ def train():
         bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data)
     else:
         print "Invalid input argument."
+def cross_val(): 
+    # Load data
+    print 'Loading training data...'
+    with open(TRAIN_DATA_DIR, 'rb') as f:
+        train_data = pickle.load(f)
+    print '-->done!'
+
+    print 'Loading validation data...'
+    with open(VAL_DATA_DIR, 'rb') as f:
+        validation_data = pickle.load(f)
+    print '-->done!'
+
+    lr_list = [0.1,0.01,0.001,0.0001]
+    regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
+    momentum_list = [0.5,0.7,0.9,0,99]
+    for config_list in list(cartes(lr_list,regterm_list,momentum_list)):
+        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,config_list[0],config_list[1],config_list[2])
+        val_accuracy = bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data)
+    
 if __name__ == "__main__":
-    train()
+    cross_val()
