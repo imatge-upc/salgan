@@ -11,13 +11,13 @@ import cv2
 import theano
 import theano.tensor as T
 import lasagne
-import pdb
-
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 from constants import *
 from models.model_salgan import ModelSALGAN
 from models.model_bce import ModelBCE
 from utils import *
+import pdb
 
 flag = str(sys.argv[1])
 
@@ -27,24 +27,26 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample):
     n_updates = 1
     nr_batches_train = int(len(train_data) / model.batch_size)
     nr_batches_val = int(len(validation_data) / model.batch_size)
+    train_loss_plt, val_loss_plt, val_acc_plt = [[] for i in range(3)]
     for current_epoch in tqdm(range(num_epochs), ncols=20):
         e_cost = 0.
-        random.shuffle(train_data)
+        #random.shuffle(train_data)
         for currChunk in chunks(train_data, model.batch_size):
             if len(currChunk) != model.batch_size:
                 continue
             batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
-                                     dtype=theano.config.floatX)
-            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
                                       dtype=theano.config.floatX)
+            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
+                                         dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
             # train generator with one batch and discriminator with next batch
             G_cost = model.G_trainFunction(batch_input, batch_output)
             e_cost += G_cost
             n_updates += 1
-
+	pdb.set_trace()
         e_cost /= nr_batches_train
-        print '\ntrain_loss->', e_cost
+	train_loss_plt.append(e_cost)
+        print '\n  train_loss->', e_cost
 
 	v_cost = 0.
 	v_acc = 0.
@@ -60,12 +62,25 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample):
             val_loss, val_binary = model.G_valFunction(batch_input,batch_output)
 	    v_cost += val_loss
 	    v_acc += val_binary
+	pdb.set_trace()
 	v_cost /= nr_batches_val
 	v_acc  /= nr_batches_val
-        print "validation_loss->", v_cost
-        print "validation_acc->", v_acc
+	val_loss_plt.append(v_cost)
+	val_acc_plt.append(v_acc)
+
+        print "  validation_loss->", v_cost
+        print "  validation_acc->", v_acc
 	print("-----------------------------------------------")
         if current_epoch % 5 == 0:
+	    fig1 = plt.figure(1)
+	    plt.title("Train and Val loss")
+	    plt.xlabel("Epochs")
+	    plt.ylabel("Loss")
+    	    plt.plot(range(current_epoch+1),train_loss_plt,color='red',linestyle='-',label='Train Loss')
+    	    plt.plot(range(current_epoch+1),val_loss_plt,color='blue',linestyle='-',label='Validation Loss')
+	    plt.legend()
+	    plt.savefig('./'+DIR_TO_SAVE+'/figure1_{:04d}.png'.format(current_epoch))
+	    plt.close(fig1)
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
             predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=DIR_TO_SAVE)
