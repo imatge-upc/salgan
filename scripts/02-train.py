@@ -1,7 +1,3 @@
-#   Two mode of training available:
-#       - BCE: CNN training, NOT Adversarial Training here. Only learns the generator network.
-#       - SALGAN: Adversarial Training. Updates weights for both Generator and Discriminator.
-#   The training used data previously  processed using "01-data_preocessing.py"
 import os
 import numpy as np
 import sys
@@ -58,9 +54,9 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
             batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
                                          dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
-            val_loss, val_binary = model.G_valFunction(batch_input,batch_output)
+            val_loss, val_accuracy = model.G_valFunction(batch_input,batch_output)
 	    v_cost += val_loss
-	    v_acc += val_binary
+	    v_acc += val_accuracy
 	v_cost /= nr_batches_val
 	v_acc  /= nr_batches_val
 	val_loss_plt.append(v_cost)
@@ -83,8 +79,8 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
             predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=DIR_TO_SAVE)
-
     return v_acc
+
 def salgan_batch_iterator(model, train_data, validation_sample):
     num_epochs = 100
     nr_batches_train = int(len(train_data) / model.batch_size)
@@ -180,7 +176,7 @@ def train():
 def cross_val(): 
     # Load data
     print 'Loading training data...'
-    with open(TRAIN_DATA_DIR, 'rb') as f:
+    with open(TRAIN_DATA_DIR_CROSS, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
@@ -192,9 +188,18 @@ def cross_val():
     lr_list = [0.1,0.01,0.001,0.0001]
     regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
     momentum_list = [0.5,0.7,0.9,0,99]
+    lr, regterm,mom,acc = [[] for i in range(4)]
     for config_list in list(cartes(lr_list,regterm_list,momentum_list)):
-        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,config_list[0],config_list[1],config_list[2])
-        val_accuracy = bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data)
+	if flag == 'bce':
+            model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,config_list[0],config_list[1],config_list[2])
+            val_accuracy = bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data)
+  	    lr.append(config_list[0])
+  	    regterm.append(config_list[1])
+  	    mom.append(config_list[2])
+  	    acc.append(val_accuracy)
+    for l,r,m,a in zip(lr,regterm,mom,acc):
+   	print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(l,r,m,a)
+	print('------------------------------------------------------------------') 	    
     
 if __name__ == "__main__":
     cross_val()

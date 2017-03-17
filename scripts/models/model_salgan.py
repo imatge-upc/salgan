@@ -29,13 +29,7 @@ class ModelSALGAN(Model):
         disc_lab = lasagne.layers.get_output(self.discriminator['prob'],T.concatenate([self.output_var, self.input_var], axis=1))
         disc_gen = lasagne.layers.get_output(self.discriminator['prob'],T.concatenate([prediction, self.input_var], axis=1))
 
-        # Downscale the saliency maps
-        output_var_pooled = T.signal.pool.pool_2d(self.output_var, (4, 4), mode="average_exc_pad", ignore_border=True)
-        prediction_pooled = T.signal.pool.pool_2d(prediction, (4, 4), mode="average_exc_pad", ignore_border=True)
         train_err = lasagne.objectives.binary_crossentropy(prediction, self.output_var).mean()+ 1e-3 * lasagne.regularization.regularize_network_params(self.net[output_layer_name], lasagne.regularization.l2)
-# 	 [Saeed]
-#        train_err = lasagne.objectives.squared_error(prediction_pooled, output_var_pooled).mean()
-#        + 1e-4 * lasagne.regularization.regularize_network_params(self.net[output_layer_name], lasagne.regularization.l2)
 
         # Define loss function and input data
         ones = T.ones(disc_lab.shape)

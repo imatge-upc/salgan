@@ -20,7 +20,7 @@ salmap_size = INPUT_SIZE
 
 # Resize train/validation files
 
-listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToImages, '*'))]
+listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToImagesNoAugment, '*'))]
 #listTestImages = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToImages, '*test*'))]
 #for currFile in tqdm(listImgFiles):
 #    tt = dataRepresentation.Target(os.path.join(pathToImages, currFile + '.png'),
@@ -62,19 +62,19 @@ listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(p
 listFilesTrain = [k for k in listImgFiles if 'train' in k]
 trainData = []
 for currFile in tqdm(listFilesTrain):
-    trainData.append(dataRepresentation.Target(os.path.join(pathToImages, currFile + '.png'),
-                                               os.path.join(pathToMaps, currFile + 'mask.png'),
+    trainData.append(dataRepresentation.Target(os.path.join(pathToImagesNoAugment, currFile + '.png'),
+                                               os.path.join(pathToMapsNoAugment, currFile + 'mask.png'),
                                                os.path.join(pathToFixationMaps, currFile + '.mat'),
                                                dataRepresentation.LoadState.loaded, dataRepresentation.InputType.image,
                                                dataRepresentation.LoadState.loaded, dataRepresentation.InputType.imageGrayscale,
                                                dataRepresentation.LoadState.unloaded, dataRepresentation.InputType.empty))
 
-pdb.set_trace()
-with open(os.path.join(pathToPickle, 'trainData.pickle'), 'wb') as f:
+with open(os.path.join(pathToPickle, 'trainDataNoAugment.pickle'), 'wb') as f:
     pickle.dump(trainData, f)
 
 # Validation
 
+listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToImages, '*'))]
 listFilesValidation = [k for k in listImgFiles if 'val' in k]
 validationData = []
 for currFile in tqdm(listFilesValidation):
@@ -89,15 +89,16 @@ with open(os.path.join(pathToPickle, 'validationData.pickle'), 'wb') as f:
     pickle.dump(validationData, f)
 
 # Test
+listFilesTest = [k for k in listImgFiles if 'test' in k]
+testData = []
+for currFile in tqdm(listFilesTest):
+    testData.append(dataRepresentation.Target(os.path.join(pathToImages, currFile + '.png'),
+                                                    os.path.join(pathToMaps, currFile + 'mask.png'),
+                                                    os.path.join(pathToFixationMaps, currFile + '.mat'),
+                                                    dataRepresentation.LoadState.loaded, dataRepresentation.InputType.image,
+                                                    dataRepresentation.LoadState.loaded, dataRepresentation.InputType.imageGrayscale,
+                                                    dataRepresentation.LoadState.unloaded, dataRepresentation.InputType.empty))
 
-#testData = []
-#
-#for currFile in tqdm(listTestImages):
-#    testData.append(dataRepresentation.Target(os.path.join(pathOutputImages, currFile + '.png'),
-#                                              os.path.join(pathOutputMaps, currFile + '.png'),
-#                                              dataRepresentation.LoadState.loaded, dataRepresentation.InputType.image,
-#                                              dataRepresentation.LoadState.unloaded,
-#                                              dataRepresentation.InputType.empty))
-#
-#with open(os.path.join(pathToPickle, 'testData.pickle'), 'wb') as f:
-#    pickle.dump(testData, f)
+with open(os.path.join(pathToPickle, 'testData.pickle'), 'wb') as f:
+    pickle.dump(testData, f)
+
