@@ -23,7 +23,7 @@ PATH_TO_VGG16_WEIGHTS = '/home/titan/Saeed/saliency-salgan-2017/models/vgg16.pkl
 INPUT_SIZE = (320,240)
 
 # Directory to keep snapshots
-DIR_TO_SAVE = '../test'
+DIR_TO_SAVE = '../weights'
 
 #Path to test images
 pathToTestImages = '/home/titan/Saeed/saliency-salgan-2017/images'

@@ -22,36 +22,49 @@ from utils import *
 flag = str(sys.argv[1])
 
 
-def bce_batch_iterator(model, train_data, validation_sample):
-    num_epochs = 500
+def bce_batch_iterator(model, train_data, validation_data,validation_sample):
+    num_epochs = 100
     n_updates = 1
     nr_batches_train = int(len(train_data) / model.batch_size)
+    nr_batches_val = int(len(validation_data) / model.batch_size)
     for current_epoch in tqdm(range(num_epochs), ncols=20):
         e_cost = 0.
-
         random.shuffle(train_data)
-
         for currChunk in chunks(train_data, model.batch_size):
-
             if len(currChunk) != model.batch_size:
                 continue
-
             batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
                                      dtype=theano.config.floatX)
-
             batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
                                       dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
-
             # train generator with one batch and discriminator with next batch
             G_cost = model.G_trainFunction(batch_input, batch_output)
             e_cost += G_cost
             n_updates += 1
 
         e_cost /= nr_batches_train
+        print '\ntrain_loss->', e_cost
 
-        print 'Epoch:', current_epoch, ' train_loss->', e_cost
+	v_cost = 0.
+	v_acc = 0.
+        for currChunk in chunks(validation_data, model.batch_size):
+            if len(currChunk) != model.batch_size:
+                continue
+            batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
+                                        dtype=theano.config.floatX)
 
+            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
+                                         dtype=theano.config.floatX)
+            batch_output = np.expand_dims(batch_output, axis=1)
+            val_loss, val_binary = model.G_valFunction(batch_input,batch_output)
+	    v_cost += val_loss
+	    v_acc += val_binary
+	v_cost /= nr_batches_val
+	v_acc  /= nr_batches_val
+        print "validation_loss->", v_cost
+        print "validation_acc->", v_acc
+	print("-----------------------------------------------")
         if current_epoch % 5 == 0:
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
@@ -116,7 +129,7 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open('/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/trainData.pickle', 'rb') as f:
+    with open('/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/validationData.pickle', 'rb') as f:
     # with open(TRAIN_DATA_DIR, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
@@ -141,13 +154,13 @@ def train():
         # Load a pre-trained model
         load_weights(net=model.net['output'], path="test_gen_only/gen_", epochtoload=10)
         # load_weights(net=model.discriminator['fc5'], path="test_dialted/disrim_", epochtoload=54)
-        salgan_batch_iterator(model, train_data, validation_sample.image.data)
+        salgan_batch_iterator(model, train_data, validation_data, validation_sample.image.data)
 
     elif flag == 'bce':
         model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1])
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path='test/gen_', epochtoload=15)
-        bce_batch_iterator(model, train_data, validation_sample.image.data)
+        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data)
     else:
         print "Invalid input argument."
 if __name__ == "__main__":

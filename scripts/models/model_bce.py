@@ -9,7 +9,7 @@ from model import Model
 
 
 class ModelBCE(Model):
-    def __init__(self, w, h, batch_size=12, lr=0.01):
+    def __init__(self, w, h, batch_size=10, lr=0.01):
         super(ModelBCE, self).__init__(w, h, batch_size)
 
         self.net = generator.build(self.inputHeight, self.inputWidth, self.input_var)
@@ -18,6 +18,8 @@ class ModelBCE(Model):
         prediction = lasagne.layers.get_output(self.net[output_layer_name])
 
         test_prediction = lasagne.layers.get_output(self.net[output_layer_name], deterministic=True)
+    	test_loss = lasagne.objectives.binary_crossentropy(test_prediction,self.output_var).mean()
+	test_acc = lasagne.objectives.binary_accuracy(test_prediction,self.output_var).mean()
         self.predictFunction = theano.function([self.input_var], test_prediction)
 
         output_var_pooled = T.signal.pool.pool_2d(self.output_var, (4, 4), mode="average_exc_pad", ignore_border=True)
@@ -34,3 +36,4 @@ class ModelBCE(Model):
         G_updates = lasagne.updates.momentum(train_err, G_params, learning_rate=self.G_lr,momentum=0.99)
 
         self.G_trainFunction = theano.function(inputs=[self.input_var, self.output_var], outputs=train_err, updates=G_updates,allow_input_downcast=True)
+	self.G_valFunction = theano.function([self.input_var, self.output_var],[test_loss,test_acc])
