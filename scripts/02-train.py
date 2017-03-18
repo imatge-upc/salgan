@@ -184,15 +184,21 @@ def cross_val():
     with open(VAL_DATA_DIR, 'rb') as f:
         validation_data = pickle.load(f)
     print '-->done!'
+    num_random = random.choice(range(len(validation_data)))
+    validation_sample = validation_data[num_random]
 
-    lr_list = [0.1,0.01,0.001,0.0001]
+   # lr_list = [0.1,0.01,0.001,0.0001]
+   # regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
+   # momentum_list = [0.7,0.9,0.99]
+   # lr_list = [0.1,0.01,0.001,0.0001]
+    lr_list = [0.1,0.01,0.001]
     regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
-    momentum_list = [0.5,0.7,0.9,0,99]
+    momentum_list = [0.9,0.99]
     lr, regterm,mom,acc = [[] for i in range(4)]
     for config_list in list(cartes(lr_list,regterm_list,momentum_list)):
 	if flag == 'bce':
             model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,config_list[0],config_list[1],config_list[2])
-            val_accuracy = bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data)
+            val_accuracy = bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=10)
   	    lr.append(config_list[0])
   	    regterm.append(config_list[1])
   	    mom.append(config_list[2])
@@ -200,6 +206,9 @@ def cross_val():
     for l,r,m,a in zip(lr,regterm,mom,acc):
    	print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(l,r,m,a)
 	print('------------------------------------------------------------------') 	    
-    
+
+    print('--------------------------------The Best--------------------------') 	   
+    best_idx = np.argmax(acc)
+    print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(lr[best_idx],regterm[best_idx],mom[best_idx],acc[best_idx])
 if __name__ == "__main__":
     cross_val()

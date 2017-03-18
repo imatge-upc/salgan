@@ -9,7 +9,7 @@ from model import Model
 
 
 class ModelBCE(Model):
-    def __init__(self, w, h, batch_size=10, lr=0.01,regterm=1e-4,momentum=0.99):
+    def __init__(self, w, h, batch_size,lr,regterm,momentum):
         super(ModelBCE, self).__init__(w, h, batch_size)
 
         self.net = generator.build(self.inputHeight, self.inputWidth, self.input_var)
@@ -17,8 +17,7 @@ class ModelBCE(Model):
         output_layer_name = 'output'
 
         prediction = lasagne.layers.get_output(self.net[output_layer_name],deterministic=False)
-        bce = lasagne.objectives.binary_crossentropy(prediction, self.output_var).mean()
-        #+ 5e-2 * lasagne.regularization.regularize_network_params(self.net[output_layer_name], lasagne.regularization.l2)
+        bce = lasagne.objectives.binary_crossentropy(prediction, self.output_var).mean() + regterm * lasagne.regularization.regularize_network_params(self.net[output_layer_name], lasagne.regularization.l2)
         train_err = bce
         # parameters update and training
         G_params = lasagne.layers.get_all_params(self.net[output_layer_name], trainable=True)
