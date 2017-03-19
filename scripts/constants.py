@@ -13,7 +13,7 @@ pathOutputMaps = '/home/titan/Saeed/saliency-salgan-2017/data/mask320x240'
 pathToPickle = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240'
 
 # Path to pickles which contains processed data
-TRAIN_DATA_DIR = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/validationData.pickle'
+TRAIN_DATA_DIR = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/trainData.pickle'
 TRAIN_DATA_DIR_CROSS = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/trainDataNoAugment.pickle'
 VAL_DATA_DIR = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/validationData.pickle'
 TEST_DATA_DIR = '/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/testData.pickle'
@@ -26,6 +26,7 @@ INPUT_SIZE = (320,240)
 
 # Directory to keep snapshots
 DIR_TO_SAVE = '../weights'
+FIG_SAVE_DIR = '../figs'
 
 #Path to test images
 pathToTestImages = '/home/titan/Saeed/saliency-salgan-2017/images'

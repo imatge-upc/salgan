@@ -7,7 +7,6 @@ import cv2
 import theano
 import theano.tensor as T
 import lasagne
-import matplotlib.pyplot as plt
 from sympy.utilities.iterables import cartes
 from tqdm import tqdm
 from constants import *
@@ -15,7 +14,10 @@ from models.model_salgan import ModelSALGAN
 from models.model_bce import ModelBCE
 from utils import *
 import pdb
-
+import matplotlib
+#To bypass X11 for matplotlib in tmux
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 flag = str(sys.argv[1])
 
 
@@ -24,9 +26,9 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
     n_updates = 1
     nr_batches_train = int(len(train_data) / model.batch_size)
     nr_batches_val = int(len(validation_data) / model.batch_size)
-    train_loss_plt, val_loss_plt, val_acc_plt = [[] for i in range(3)]
+    train_loss_plt, train_acc_plt, val_loss_plt, val_acc_plt = [[] for i in range(4)]
     for current_epoch in tqdm(range(num_epochs), ncols=20):
-        e_cost = 0.
+        e_cost = 0.;e_acc = 0.
         random.shuffle(train_data)
         for currChunk in chunks(train_data, model.batch_size):
             if len(currChunk) != model.batch_size:
@@ -36,12 +38,13 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
             batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
                                          dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
-            G_cost = model.G_trainFunction(batch_input, batch_output)
-            e_cost += G_cost
+            G_cost,G_acc = model.G_trainFunction(batch_input, batch_output)
+            e_cost += G_cost;e_acc += G_acc
             n_updates += 1
-        e_cost /= nr_batches_train
-	train_loss_plt.append(e_cost)
+        e_cost /= nr_batches_train; e_acc /= nr_batches_train
+	train_loss_plt.append(e_cost);train_acc_plt.append(e_acc)
         print '\n  train_loss->', e_cost
+        print '\n  train_accuracy->', e_acc
 
 	v_cost = 0.
 	v_acc = 0.
@@ -55,30 +58,33 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
                                          dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
             val_loss, val_accuracy = model.G_valFunction(batch_input,batch_output)
-	    v_cost += val_loss
-	    v_acc += val_accuracy
-	v_cost /= nr_batches_val
-	v_acc  /= nr_batches_val
-	val_loss_plt.append(v_cost)
-	val_acc_plt.append(v_acc)
+	    v_cost += val_loss; v_acc += val_accuracy
+	v_cost /= nr_batches_val; v_acc /= nr_batches_val
+	val_loss_plt.append(v_cost);val_acc_plt.append(v_acc)
 
         print "  validation_loss->", v_cost
-        print "  validation_acc->", v_acc
+        print "  validation_accuracy->", v_acc
 	print("-----------------------------------------------")
         if current_epoch % 5 == 0:
 	    if fig is True:
 	        fig1 = plt.figure(1)
-	        plt.title("Train and Val loss")
-	        plt.xlabel("Epochs")
-	        plt.ylabel("Loss")
+	        plt.title("Train and Val loss");plt.xlabel("Epochs");plt.ylabel("Loss")
     	        plt.plot(range(current_epoch+1),train_loss_plt,color='red',linestyle='-',label='Train Loss')
     	        plt.plot(range(current_epoch+1),val_loss_plt,color='blue',linestyle='-',label='Validation Loss')
 	        plt.legend()
-	        plt.savefig('./'+DIR_TO_SAVE+'/figure1_{:04d}.png'.format(current_epoch))
+	        plt.savefig('./'+FIG_SAVE_DIR+'/figure1_{:04d}.png'.format(current_epoch))
 	        plt.close(fig1)
+
+	        fig2 = plt.figure(2)
+	        plt.title("Train and Val Accuracy");plt.xlabel("Epochs");plt.ylabel("Accuracy")
+    	        plt.plot(range(current_epoch+1),train_acc_plt,color='red',linestyle='-',label='Train Accuracy')
+    	        plt.plot(range(current_epoch+1),val_acc_plt,color='blue',linestyle='-',label='Validation Accuracy')
+	        plt.legend()
+	        plt.savefig('./'+FIG_SAVE_DIR+'/figure2_{:04d}.png'.format(current_epoch))
+	        plt.close(fig2)
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
-            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=DIR_TO_SAVE)
+            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=FIG_SAVE_DIR)
     return v_acc
 
 def salgan_batch_iterator(model, train_data, validation_sample):
@@ -128,7 +134,7 @@ def salgan_batch_iterator(model, train_data, validation_sample):
                      *lasagne.layers.get_all_param_values(model.net['output']))
             np.savez('./' + DIR_TO_SAVE + '/disrim_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.discriminator['fc5']))
-            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=DIR_TO_SAVE)
+            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=FIG_SAVE_DIR)
         print 'Epoch:', current_epoch, ' train_loss->', (g_cost, d_cost, e_cost)
 
 
@@ -139,26 +145,22 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open('/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/validationData.pickle', 'rb') as f:
-    # with open(TRAIN_DATA_DIR, 'rb') as f:
+    with open(TRAIN_DATA_DIR, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
-    print 'Loading validation data...'
-    with open('/home/titan/Saeed/saliency-salgan-2017/data/pickle320x240/validationData.pickle', 'rb') as f:
-    # with open(VALIDATION_DATA_DIR, 'rb') as f:
+    print 'Loading test data...'
+    with open(TEST_DATA_DIR, 'rb') as f:
         validation_data = pickle.load(f)
     print '-->done!'
 
     # Choose a random sample to monitor the training
     num_random = random.choice(range(len(validation_data)))
     validation_sample = validation_data[num_random]
-    cv2.imwrite('./' + DIR_TO_SAVE + '/validationRandomSaliencyGT.png', validation_sample.saliency.data)
-    cv2.imwrite('./' + DIR_TO_SAVE + '/validationRandomImage.png', cv2.cvtColor(validation_sample.image.data,
+    cv2.imwrite('./' + FIG_SAVE_DIR + '/validationRandomSaliencyGT.png', validation_sample.saliency.data)
+    cv2.imwrite('./' + FIG_SAVE_DIR + '/validationRandomImage.png', cv2.cvtColor(validation_sample.image.data,
                                                                                 cv2.COLOR_RGB2BGR))
-
     # Create network
-
     if flag == 'salgan':
         model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1])
         # Load a pre-trained model
@@ -167,10 +169,10 @@ def train():
         salgan_batch_iterator(model, train_data, validation_data, validation_sample.image.data)
 
     elif flag == 'bce':
-        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1])
+        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.1,0.0001,0.9)
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path='test/gen_', epochtoload=15)
-        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data)
+        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=100,fig=True)
     else:
         print "Invalid input argument."
 def cross_val(): 
@@ -187,10 +189,6 @@ def cross_val():
     num_random = random.choice(range(len(validation_data)))
     validation_sample = validation_data[num_random]
 
-   # lr_list = [0.1,0.01,0.001,0.0001]
-   # regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
-   # momentum_list = [0.7,0.9,0.99]
-   # lr_list = [0.1,0.01,0.001,0.0001]
     lr_list = [0.1,0.01,0.001]
     regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
     momentum_list = [0.9,0.99]
@@ -211,4 +209,4 @@ def cross_val():
     best_idx = np.argmax(acc)
     print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(lr[best_idx],regterm[best_idx],mom[best_idx],acc[best_idx])
 if __name__ == "__main__":
-    cross_val()
+    train()

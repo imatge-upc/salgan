@@ -19,11 +19,11 @@ class ModelBCE(Model):
         prediction = lasagne.layers.get_output(self.net[output_layer_name],deterministic=False)
         bce = lasagne.objectives.binary_crossentropy(prediction, self.output_var).mean() + regterm * lasagne.regularization.regularize_network_params(self.net[output_layer_name], lasagne.regularization.l2)
         train_err = bce
-        # parameters update and training
+        train_acc = lasagne.objectives.binary_accuracy(prediction,self.output_var).mean()
         G_params = lasagne.layers.get_all_params(self.net[output_layer_name], trainable=True)
         self.G_lr = theano.shared(np.array(lr, dtype=theano.config.floatX))
         G_updates = lasagne.updates.momentum(train_err, G_params, learning_rate=self.G_lr,momentum=momentum)
-        self.G_trainFunction = theano.function(inputs=[self.input_var, self.output_var], outputs=train_err, updates=G_updates)
+        self.G_trainFunction = theano.function(inputs=[self.input_var, self.output_var], outputs=[train_err,train_acc], updates=G_updates)
 
         test_prediction = lasagne.layers.get_output(self.net[output_layer_name],deterministic=True)
     	test_loss = lasagne.objectives.binary_crossentropy(test_prediction,self.output_var).mean()
