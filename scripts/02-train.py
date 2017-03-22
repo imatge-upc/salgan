@@ -28,7 +28,8 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
     nr_batches_val = int(len(validation_data) / model.batch_size)
     train_loss_plt, train_acc_plt, val_loss_plt, val_acc_plt = [[] for i in range(4)]
     for current_epoch in tqdm(range(num_epochs), ncols=20):
-        e_cost = 0.;e_acc = 0.
+        counter = 0
+        e_cost = 0.;tr_acc = 0.; tr_loss = 0.
         random.shuffle(train_data)
         for currChunk in chunks(train_data, model.batch_size):
             if len(currChunk) != model.batch_size:
@@ -38,13 +39,17 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
             batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
                                          dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
-            G_cost,G_acc = model.G_trainFunction(batch_input, batch_output)
-            e_cost += G_cost;e_acc += G_acc
+            G_cost = model.G_trainFunction(batch_input, batch_output)
+            if counter < 20:
+	        tr_l, tr_jac = model.G_valFunction(batch_input,batch_output)
+                tr_loss += tr_l; tr_acc += tr_jac
+		counter += 1
+            e_cost += G_cost;
             n_updates += 1
-        e_cost /= nr_batches_train; e_acc /= nr_batches_train
-	train_loss_plt.append(e_cost);train_acc_plt.append(e_acc)
+        e_cost /= nr_batches_train; tr_acc /= counter; tr_loss /= counter
+	train_loss_plt.append(tr_loss);train_acc_plt.append(tr_acc)
         print '\n  train_loss->', e_cost
-        print '  train_accuracy->', e_acc
+        print '  train_accuracy(subset)->', tr_acc
 
 	v_cost = 0.
 	v_acc = 0.
@@ -145,7 +150,7 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open(TEST_DATA_DIR, 'rb') as f:
+    with open(TRAIN_DATA_DIR, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
@@ -169,7 +174,7 @@ def train():
         salgan_batch_iterator(model, train_data, validation_data, validation_sample.image.data)
 
     elif flag == 'bce':
-        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.1,0.0001,0.9)
+        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,1e-5,0.99)
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path='test/gen_', epochtoload=15)
         bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=100,fig=True)
@@ -209,4 +214,4 @@ def cross_val():
     best_idx = np.argmax(acc)
     print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(lr[best_idx],regterm[best_idx],mom[best_idx],acc[best_idx])
 if __name__ == "__main__":
-    cross_val()
+    train()
