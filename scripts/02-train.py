@@ -92,47 +92,49 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
             predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=FIG_SAVE_DIR)
     return v_acc
 
-def salgan_batch_iterator(model, train_data, validation_sample):
-    num_epochs = 100
+def salgan_batch_iterator(model, train_data, validation_data,validation_sample,epochs = 20, fig=False):
+    num_epochs = epochs
     nr_batches_train = int(len(train_data) / model.batch_size)
+    nr_batches_val = int(len(validation_data) / model.batch_size)
+#    train_loss_plt, train_acc_plt, val_loss_plt, val_acc_plt = [[] for i in range(4)]
     n_updates = 1
     for current_epoch in tqdm(range(num_epochs), ncols=20):
-
-        g_cost = 0.
-        d_cost = 0.
-        e_cost = 0.
-
+        
+	g_cost = 0.; d_cost = 0.; e_cost = 0.
         random.shuffle(train_data)
-
         for currChunk in chunks(train_data, model.batch_size):
-
             if len(currChunk) != model.batch_size:
                 continue
-
             batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
                                      dtype=theano.config.floatX)
             batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
                                       dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
-
-            # train generator with one batch and discriminator with next batch
             if n_updates % 2 == 0:
                 G_obj, D_obj, G_cost = model.G_trainFunction(batch_input, batch_output)
-                d_cost += D_obj
-                g_cost += G_obj
-                e_cost += G_cost
+                d_cost += D_obj; g_cost += G_obj; e_cost += G_cost
             else:
                 G_obj, D_obj, G_cost = model.D_trainFunction(batch_input, batch_output)
-                d_cost += D_obj
-                g_cost += G_obj
-                e_cost += G_cost
+                d_cost += D_obj; g_cost += G_obj; e_cost += G_cost
 
             n_updates += 1
 
-        g_cost /= nr_batches_train
-        d_cost /= nr_batches_train
-        e_cost /= nr_batches_train
+        g_cost /= nr_batches_train; d_cost /= nr_batches_train; e_cost /= nr_batches_train
 
+	v_cost = 0.
+	v_acc = 0.
+        for currChunk in chunks(validation_data, model.batch_size):
+            if len(currChunk) != model.batch_size:
+                continue
+            batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
+                                        dtype=theano.config.floatX)
+
+            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
+                                         dtype=theano.config.floatX)
+            batch_output = np.expand_dims(batch_output, axis=1)
+            val_loss, val_accuracy = model.G_valFunction(batch_input,batch_output)
+	    v_cost += val_loss; v_acc += val_accuracy
+	v_cost /= nr_batches_val; v_acc /= nr_batches_val
         # Save weights every 3 epoch
         if current_epoch % 5  == 0:
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
@@ -140,8 +142,11 @@ def salgan_batch_iterator(model, train_data, validation_sample):
             np.savez('./' + DIR_TO_SAVE + '/disrim_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.discriminator['fc5']))
             predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=FIG_SAVE_DIR)
-        print 'Epoch:', current_epoch, ' train_loss->', (g_cost, d_cost, e_cost)
-
+        print '\n train_loss->', (g_cost, d_cost, e_cost)
+        print "  validation_loss->", v_cost
+        print "  validation_accuracy->", v_acc
+	print("-----------------------------------------------")
+    return v_acc
 
 def train():
     """
@@ -150,7 +155,7 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open(TRAIN_DATA_DIR, 'rb') as f:
+    with open(VAL_DATA_DIR, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
@@ -167,11 +172,11 @@ def train():
                                                                                 cv2.COLOR_RGB2BGR))
     # Create network
     if flag == 'salgan':
-        model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1])
+        model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,0.05,1e-5,1e-5,1e-5,0.99,0.99,1/20.)
         # Load a pre-trained model
-        load_weights(net=model.net['output'], path="test_gen_only/gen_", epochtoload=10)
+        #load_weights(net=model.net['output'], path="test_gen_only/gen_", epochtoload=10)
         # load_weights(net=model.discriminator['fc5'], path="test_dialted/disrim_", epochtoload=54)
-        salgan_batch_iterator(model, train_data, validation_data, validation_sample.image.data)
+        salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=100,fig=True)
 
     elif flag == 'bce':
         model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,1e-5,0.99)
@@ -193,25 +198,47 @@ def cross_val():
     print '-->done!'
     num_random = random.choice(range(len(validation_data)))
     validation_sample = validation_data[num_random]
-
-    lr_list = [0.1,0.01,0.001,0.05]
-    regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
-    momentum_list = [0.9,0.99]
-    lr,regterm,mom,acc = [[] for i in range(4)]
-    for config_list in list(cartes(lr_list,regterm_list,momentum_list)):
-	if flag == 'bce':
+    if flag == 'bce':
+        lr_list = [0.1,0.01,0.001,0.05]
+        regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
+        momentum_list = [0.9,0.99]
+        lr,regterm,mom,acc = [[] for i in range(4)]
+        for config_list in list(cartes(lr_list,regterm_list,momentum_list)):
             model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,config_list[0],config_list[1],config_list[2])
             val_accuracy = bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=10)
-  	    lr.append(config_list[0])
-  	    regterm.append(config_list[1])
-  	    mom.append(config_list[2])
-  	    acc.append(val_accuracy)
-    for l,r,m,a in zip(lr,regterm,mom,acc):
-   	print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(l,r,m,a)
-	print('------------------------------------------------------------------') 	    
-
-    print('--------------------------------The Best--------------------------') 	   
-    best_idx = np.argmax(acc)
-    print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(lr[best_idx],regterm[best_idx],mom[best_idx],acc[best_idx])
+      	    lr.append(config_list[0])
+      	    regterm.append(config_list[1])
+      	    mom.append(config_list[2])
+      	    acc.append(val_accuracy)
+        for l,r,m,a in zip(lr,regterm,mom,acc):
+       	    print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(l,r,m,a)
+       	    print('------------------------------------------------------------------') 	    
+    
+            print('--------------------------------The Best--------------------------') 	   
+            best_idx = np.argmax(acc)
+            print ("lr: {}, lambda: {}, momentum: {}, accuracy: {}").format(lr[best_idx],regterm[best_idx],mom[best_idx],acc[best_idx])
+    elif flag == 'salgan':
+        G_lr_list = [0.1,0.01,0.05]
+        regterm_list = [1e-1,1e-2,1e-3,1e-4,1e-5]
+        D_lr_list = [0.1,0.01,0.05]
+        alpha_list = [1/5., 1/10., 1/20.]
+        G_lr,regterm,D_lr,alpha,acc = [[] for i in range(5)]
+        for config_list in list(cartes(G_lr_list,regterm_list,D_lr_list,alpha_list)):
+            model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],9,config_list[0],config_list[1],config_list[2],config_list[3])
+            val_accuracy = salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=1)
+      	    G_lr.append(config_list[0])
+      	    regterm.append(config_list[1])
+      	    D_lr.append(config_list[2])
+            alpha.append(config_list[3])
+      	    acc.append(val_accuracy)
+        for g_l,r,d_l,al,a in zip(G_lr,regterm,D_lr,alpha,acc):
+       	    print ("G_lr: {}, lambda: {}, D_lr: {}, alpha: {}, accuracy: {}").format(g_l,r,d_l,al,a)
+    	    print('------------------------------------------------------------------') 	    
+    
+        print('--------------------------------The Best--------------------------') 	   
+        best_idx = np.argmax(acc)
+        print ("G_lr: {}, lambda: {}, D_lr: {}, alpha: {}, accuracy: {}").format(G_lr[best_idx],regterm[best_idx],D_lr[best_idx],alpha[best_idx],acc[best_idx])
+    else:
+        print("Please provide a correct argument")
 if __name__ == "__main__":
-    train()
+    cross_val()

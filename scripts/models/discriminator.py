@@ -3,6 +3,7 @@ from lasagne.layers import Pool2DLayer as PoolLayer
 from lasagne.layers import DenseLayer, InputLayer
 from lasagne.nonlinearities import tanh, sigmoid
 from lasagne.layers import batch_norm
+from lasagne.init import GlorotUniform
 import nn
 
 
