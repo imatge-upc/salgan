@@ -155,7 +155,7 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open(VAL_DATA_DIR, 'rb') as f:
+    with open(TRAIN_DATA_DIR_CROSS, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
@@ -179,10 +179,10 @@ def train():
         salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=20,fig=True)
 
     elif flag == 'bce':
-        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,1e-5,0.99)
+        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],16,0.05,1e-5,0.99)
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path='test/gen_', epochtoload=15)
-        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=10,fig=True)
+        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=20,fig=True)
     else:
         print "Invalid input argument."
 def cross_val(): 
@@ -204,7 +204,7 @@ def cross_val():
         momentum_list = [0.9,0.99]
         lr,regterm,mom,acc = [[] for i in range(4)]
         for config_list in list(cartes(lr_list,regterm_list,momentum_list)):
-            model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,config_list[0],config_list[1],config_list[2])
+            model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],16,config_list[0],config_list[1],config_list[2])
             val_accuracy = bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=10)
       	    lr.append(config_list[0])
       	    regterm.append(config_list[1])

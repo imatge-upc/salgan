@@ -16,8 +16,9 @@ class ModelBCE(Model):
 
         output_layer_name = 'output'
 
-        prediction = lasagne.layers.get_output(self.net[output_layer_name],deterministic=False)
-        prediction = T.nnet.abstract_conv.bilinear_upsampling(prediction,16)
+        prediction_tmp = lasagne.layers.get_output(self.net[output_layer_name],deterministic=False)
+        # Only for VGG 16 (Upsampling)
+        prediction = T.nnet.abstract_conv.bilinear_upsampling(prediction_tmp,16, batch_size,1,True)
 
         bce = lasagne.objectives.binary_crossentropy(prediction, self.output_var).mean() + regterm * lasagne.regularization.regularize_network_params(self.net[output_layer_name], lasagne.regularization.l2)
         train_err = bce
@@ -26,8 +27,9 @@ class ModelBCE(Model):
         G_updates = lasagne.updates.momentum(train_err, G_params, learning_rate=self.G_lr,momentum=momentum)
         self.G_trainFunction = theano.function(inputs=[self.input_var, self.output_var], outputs=train_err, updates=G_updates)
 
-        test_prediction = lasagne.layers.get_output(self.net[output_layer_name],deterministic=True)
-        test_prediction = T.nnet.abstract_conv.bilinear_upsampling(test_prediction,16)
+        test_prediction_tmp = lasagne.layers.get_output(self.net[output_layer_name],deterministic=True)
+        # Only for VGG 16 (Upsampling)
+        test_prediction = T.nnet.abstract_conv.bilinear_upsampling(test_prediction_tmp,16)
     	test_loss = lasagne.objectives.binary_crossentropy(test_prediction,self.output_var).mean()
 	test_acc = lasagne.objectives.binary_jaccard_index(test_prediction,self.output_var).mean()
 	self.G_valFunction = theano.function(inputs=[self.input_var, self.output_var],outputs=[test_loss,test_acc])
