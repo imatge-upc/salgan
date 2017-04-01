@@ -18,7 +18,7 @@ def set_pretrained_weights(net, path_to_model_weights=PATH_TO_VGG16_WEIGHTS):
 
 def build_encoder(input_height, input_width, input_var):
     # encoder = vgg16.build(input_height, input_width, input_var)
-    encoder = unet.build(input_height, input_width, input_var)
+    encoder = vgg16.build(input_height, input_width, input_var)
     # set_pretrained_weights(encoder)
     return encoder
 

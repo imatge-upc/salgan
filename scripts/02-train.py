@@ -172,17 +172,17 @@ def train():
                                                                                 cv2.COLOR_RGB2BGR))
     # Create network
     if flag == 'salgan':
-        model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,0.05,1e-5,1e-5,1e-5,0.99,0.99,1/20.)
+        model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],9,0.01,1e-05,0.01,0.2)
         # Load a pre-trained model
         #load_weights(net=model.net['output'], path="test_gen_only/gen_", epochtoload=10)
         # load_weights(net=model.discriminator['fc5'], path="test_dialted/disrim_", epochtoload=54)
-        salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=100,fig=True)
+        salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=20,fig=True)
 
     elif flag == 'bce':
         model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,1e-5,0.99)
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path='test/gen_', epochtoload=15)
-        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=100,fig=True)
+        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=10,fig=True)
     else:
         print "Invalid input argument."
 def cross_val(): 
@@ -225,7 +225,7 @@ def cross_val():
         G_lr,regterm,D_lr,alpha,acc = [[] for i in range(5)]
         for config_list in list(cartes(G_lr_list,regterm_list,D_lr_list,alpha_list)):
             model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],9,config_list[0],config_list[1],config_list[2],config_list[3])
-            val_accuracy = salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=1)
+            val_accuracy = salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=10)
       	    G_lr.append(config_list[0])
       	    regterm.append(config_list[1])
       	    D_lr.append(config_list[2])
@@ -241,4 +241,4 @@ def cross_val():
     else:
         print("Please provide a correct argument")
 if __name__ == "__main__":
-    cross_val()
+    train()
