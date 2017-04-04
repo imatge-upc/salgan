@@ -6,6 +6,7 @@ pathToImages = '/home/titan/Saeed/saliency-salgan-2017/data/dermoFitImage'
 pathToMaps = '/home/titan/Saeed/saliency-salgan-2017/data/dermoFitMasks'
 pathToImagesNoAugment = '/home/titan/Saeed/saliency-salgan-2017/data/train_img_cross'
 pathToMapsNoAugment = '/home/titan/Saeed/saliency-salgan-2017/data/train_mask_cross'
+pathToResMaps = '/home/titan/Saeed/saliency-salgan-2017/data/dermoFitResults'
 pathToFixationMaps = ''
 # Path to processed data
 pathOutputImages = '/home/titan/Saeed/saliency-salgan-2017/data/image320x240'
@@ -30,6 +31,3 @@ FIG_SAVE_DIR = '../figs'
 
 #Path to test images
 pathToTestImages = '/home/titan/Saeed/saliency-salgan-2017/images'
-
-#Path to segmentation resulta
-pathToResultMaps = '/home/titan/Saeed/saliency-salgan-2017/segmentation'

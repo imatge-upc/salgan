@@ -5,34 +5,34 @@ import sys
 import glob
 from tqdm import tqdm
 from constants import *
-import pdb
 from sklearn.metrics import jaccard_similarity_score
 def evaluate():
 
-    listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToTestImages,'*.png'))]
+    listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToResMaps,'*.bmp'))]
     err = 0.
     jaccard_score=0.
     dice = 0.
     dice_err = 0.
     for currFile in tqdm(listImgFiles):
 
-        res = cv2.imread(os.path.join(pathToResultMaps,currFile+'_seg.jpg'),0)/255
-	gt = cv2.imread(os.path.join(pathToMaps,currFile+'mask.png'),0)/255		
-	print "Filename-->", currFile, " ResSize--> ", res.shape, "GtSize:--> ", gt.shape
-   	pixelwise_err = np.sum((res-gt)**2)
-	jaccard_score += jaccard_similarity_coefficient(gt, res)
-        dice += np.sum(res[gt==1])*2.0 / (np.sum(res) + np.sum(gt))
-        
-	pixelwise_err /= float(res.shape[0]*res.shape[1])
-        err += pixelwise_err
+        #res = cv2.imread(os.path.join(pathToResMaps,currFile+'.bmp'),cv2.IMREAD_GRAYSCALE)
+   	res = np.load(os.path.join(pathToResMaps,currFile+'.npy'))
+# 	res = cv2.normalize(res.astype('float'),None,0.0,1.0,cv2.NORM_MINMAX)
+	gt = np.float32(cv2.imread(os.path.join(pathToMaps,currFile+'mask.png'),cv2.IMREAD_GRAYSCALE))/255
+	#print "Filename-->", currFile, " ResSize--> ", res.shape, "GtSize:--> ", gt.shape
+   	#pixelwise_err = np.sum((res-gt)**2)
+	jaccard_score += jaccard_similarity_coefficient(res,gt)
+        #dice += np.sum(res[gt==1])*2.0 / (np.sum(res) + np.sum(gt))
+	#pixelwise_err /= float(res.shape[0]*res.shape[1])
+        #err += pixelwise_err
 
-    err /= len(listImgFiles)
-    dice /= len(listImgFiles)
+    #err /= len(listImgFiles)
+    #dice /= len(listImgFiles)
     jaccard_score /= len(listImgFiles)
-    print "Error: ", err
-    print "Acc: ", 1-err
+    #print "Error: ", err
+    #print "Acc: ", 1-err
     print "Jaccard: ", jaccard_score
-    print "Dice: ", dice
+    #print "Dice: ", dice
 
 def jaccard_similarity_coefficient(A, B, no_positives=1.0):
     """Returns the jaccard index/similarity coefficient between A and B.

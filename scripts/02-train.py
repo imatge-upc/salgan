@@ -99,7 +99,6 @@ def salgan_batch_iterator(model, train_data, validation_data,validation_sample,e
 #    train_loss_plt, train_acc_plt, val_loss_plt, val_acc_plt = [[] for i in range(4)]
     n_updates = 1
     for current_epoch in tqdm(range(num_epochs), ncols=20):
-        
 	g_cost = 0.; d_cost = 0.; e_cost = 0.
         random.shuffle(train_data)
         for currChunk in chunks(train_data, model.batch_size):
@@ -155,7 +154,7 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open(TRAIN_DATA_DIR_CROSS, 'rb') as f:
+    with open(TRAIN_DATA_DIR, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
