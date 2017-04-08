@@ -8,20 +8,20 @@ from constants import *
 from sklearn.metrics import jaccard_similarity_score
 def evaluate():
 
-    listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToResMaps,'*.bmp'))]
+    listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToResMaps,'*.png'))]
     err = 0.
     jaccard_score=0.
     dice = 0.
     dice_err = 0.
     for currFile in tqdm(listImgFiles):
 
-        #res = cv2.imread(os.path.join(pathToResMaps,currFile+'.bmp'),cv2.IMREAD_GRAYSCALE)
+#        res = np.float32(cv2.imread(os.path.join(pathToResMaps,currFile+'.png'),cv2.IMREAD_GRAYSCALE))/255
    	res = np.load(os.path.join(pathToResMaps,currFile+'.npy'))
 # 	res = cv2.normalize(res.astype('float'),None,0.0,1.0,cv2.NORM_MINMAX)
 	gt = np.float32(cv2.imread(os.path.join(pathToMaps,currFile+'mask.png'),cv2.IMREAD_GRAYSCALE))/255
 	#print "Filename-->", currFile, " ResSize--> ", res.shape, "GtSize:--> ", gt.shape
    	#pixelwise_err = np.sum((res-gt)**2)
-	jaccard_score += jaccard_similarity_coefficient(res,gt)
+	jaccard_score += jaccard_similarity_coefficient(gt,res)
         #dice += np.sum(res[gt==1])*2.0 / (np.sum(res) + np.sum(gt))
 	#pixelwise_err /= float(res.shape[0]*res.shape[1])
         #err += pixelwise_err

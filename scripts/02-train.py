@@ -15,17 +15,18 @@ from models.model_bce import ModelBCE
 from utils import *
 import pdb
 import matplotlib
+
+#####################################
 #To bypass X11 for matplotlib in tmux
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+#####################################
 flag = str(sys.argv[1])
 
-
-def bce_batch_iterator(model, train_data, validation_data,validation_sample,epochs = 100, fig=False):
-    num_epochs = epochs
+def bce_batch_iterator(model, train_data, validation_data, validation_sample, epochs = 10, fig=False):
+    num_epochs = epochs+1
     n_updates = 1
     nr_batches_train = int(len(train_data) / model.batch_size)
-    nr_batches_val = int(len(validation_data) / model.batch_size)
     train_loss_plt, train_acc_plt, val_loss_plt, val_acc_plt = [[] for i in range(4)]
     for current_epoch in tqdm(range(num_epochs), ncols=20):
         counter = 0
@@ -34,10 +35,8 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
         for currChunk in chunks(train_data, model.batch_size):
             if len(currChunk) != model.batch_size:
                 continue
-            batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
-                                      dtype=theano.config.floatX)
-            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
-                                         dtype=theano.config.floatX)
+            batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],dtype=theano.config.floatX)
+            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
             G_cost = model.G_trainFunction(batch_input, batch_output)
             if counter < 20:
@@ -50,53 +49,22 @@ def bce_batch_iterator(model, train_data, validation_data,validation_sample,epoc
 	train_loss_plt.append(tr_loss);train_acc_plt.append(tr_acc)
         print '\n  train_loss->', e_cost
         print '  train_accuracy(subset)->', tr_acc
-
-	v_cost = 0.
-	v_acc = 0.
-        for currChunk in chunks(validation_data, model.batch_size):
-            if len(currChunk) != model.batch_size:
-                continue
-            batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
-                                        dtype=theano.config.floatX)
-
-            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
-                                         dtype=theano.config.floatX)
-            batch_output = np.expand_dims(batch_output, axis=1)
-            val_loss, val_accuracy = model.G_valFunction(batch_input,batch_output)
-	    v_cost += val_loss; v_acc += val_accuracy
-	v_cost /= nr_batches_val; v_acc /= nr_batches_val
+        
+	v_cost, v_acc = bce_feedforward(model,validation_data,True)
 	val_loss_plt.append(v_cost);val_acc_plt.append(v_acc)
-
-        print "  validation_loss->", v_cost
-        print "  validation_accuracy->", v_acc
-	print("-----------------------------------------------")
         if current_epoch % 5 == 0:
 	    if fig is True:
-	        fig1 = plt.figure(1)
-	        plt.title("Train and Val loss");plt.xlabel("Epochs");plt.ylabel("Loss")
-    	        plt.plot(range(current_epoch+1),train_loss_plt,color='red',linestyle='-',label='Train Loss')
-    	        plt.plot(range(current_epoch+1),val_loss_plt,color='blue',linestyle='-',label='Validation Loss')
-	        plt.legend()
-	        plt.savefig('./'+FIG_SAVE_DIR+'/figure1_{:04d}.png'.format(current_epoch))
-	        plt.close(fig1)
-
-	        fig2 = plt.figure(2)
-	        plt.title("Train and Val Accuracy");plt.xlabel("Epochs");plt.ylabel("Accuracy")
-    	        plt.plot(range(current_epoch+1),train_acc_plt,color='red',linestyle='-',label='Train Accuracy')
-    	        plt.plot(range(current_epoch+1),val_acc_plt,color='blue',linestyle='-',label='Validation Accuracy')
-	        plt.legend()
-	        plt.savefig('./'+FIG_SAVE_DIR+'/figure2_{:04d}.png'.format(current_epoch))
-	        plt.close(fig2)
+		draw_figs(train_loss_plt, val_loss_plt, 'Train Loss', 'Val Loss')
+		draw_figs(train_acc_plt, val_acc_plt, 'Train Acc', 'Val Acc')
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
             predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=FIG_SAVE_DIR)
     return v_acc
 
 def salgan_batch_iterator(model, train_data, validation_data,validation_sample,epochs = 20, fig=False):
-    num_epochs = epochs
+    num_epochs = epochs+1
     nr_batches_train = int(len(train_data) / model.batch_size)
-    nr_batches_val = int(len(validation_data) / model.batch_size)
-#    train_loss_plt, train_acc_plt, val_loss_plt, val_acc_plt = [[] for i in range(4)]
+    train_loss_plt, train_acc_plt, val_loss_plt, val_acc_plt = [[] for i in range(4)]
     n_updates = 1
     for current_epoch in tqdm(range(num_epochs), ncols=20):
 	g_cost = 0.; d_cost = 0.; e_cost = 0.
@@ -104,10 +72,8 @@ def salgan_batch_iterator(model, train_data, validation_data,validation_sample,e
         for currChunk in chunks(train_data, model.batch_size):
             if len(currChunk) != model.batch_size:
                 continue
-            batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
-                                     dtype=theano.config.floatX)
-            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
-                                      dtype=theano.config.floatX)
+            batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],dtype=theano.config.floatX)
+            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
             if n_updates % 2 == 0:
                 G_obj, D_obj, G_cost = model.G_trainFunction(batch_input, batch_output)
@@ -115,38 +81,64 @@ def salgan_batch_iterator(model, train_data, validation_data,validation_sample,e
             else:
                 G_obj, D_obj, G_cost = model.D_trainFunction(batch_input, batch_output)
                 d_cost += D_obj; g_cost += G_obj; e_cost += G_cost
-
             n_updates += 1
+        g_cost /= nr_batches_train
+	d_cost /= nr_batches_train
+	e_cost /= nr_batches_train
 
-        g_cost /= nr_batches_train; d_cost /= nr_batches_train; e_cost /= nr_batches_train
-
-	v_cost = 0.
-	v_acc = 0.
-        for currChunk in chunks(validation_data, model.batch_size):
-            if len(currChunk) != model.batch_size:
-                continue
-            batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],
-                                        dtype=theano.config.floatX)
-
-            batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],
-                                         dtype=theano.config.floatX)
-            batch_output = np.expand_dims(batch_output, axis=1)
-            val_loss, val_accuracy = model.G_valFunction(batch_input,batch_output)
-	    v_cost += val_loss; v_acc += val_accuracy
-	v_cost /= nr_batches_val; v_acc /= nr_batches_val
-        # Save weights every 3 epoch
-        if current_epoch % 5  == 0:
-            np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
-                     *lasagne.layers.get_all_param_values(model.net['output']))
-            np.savez('./' + DIR_TO_SAVE + '/disrim_modelWeights{:04d}.npz'.format(current_epoch),
-                     *lasagne.layers.get_all_param_values(model.discriminator['fc5']))
-            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=FIG_SAVE_DIR)
-        print '\n train_loss->', (g_cost, d_cost, e_cost)
-        print "  validation_loss->", v_cost
-        print "  validation_accuracy->", v_acc
-	print("-----------------------------------------------")
+	#Compute the Jaccard Index on the Validation
+	v_cost, v_acc = bce_feedforward(model,validation_data,True)
     return v_acc
 
+def bce_feedforward(model, validation_data, bPrint=False):
+    nr_batches_val = int(len(validation_data) / model.batch_size)
+    v_cost = 0.
+    v_acc = 0.
+    for currChunk in chunks(validation_data, model.batch_size):
+        if len(currChunk) != model.batch_size:
+            continue
+        batch_input = np.asarray([x.image.data.astype(theano.config.floatX).transpose(2, 0, 1) for x in currChunk],dtype=theano.config.floatX)
+        batch_output = np.asarray([y.saliency.data.astype(theano.config.floatX) / 255. for y in currChunk],dtype=theano.config.floatX)
+        batch_output = np.expand_dims(batch_output, axis=1)
+        val_loss, val_accuracy = model.G_valFunction(batch_input,batch_output)
+        v_cost += val_loss
+        v_acc += val_accuracy
+    v_cost /= nr_batches_val
+    v_acc /= nr_batches_val
+    if bPrint is True:
+        print "  validation_accuracy -->", v_acc
+	print "  validation_loss -->", v_cost
+	print "-----------------------------------------"
+    return v_cost, v_acc
+
+def draw_figs(x,y,current_epoch,label1,label2):
+    fig1 = plt.figure(1)
+    plt.plot(range(current_epoch+1),x,color='red',linestyle='-',label=label1)
+    plt.plot(range(current_epoch+1),val_loss_plt,color='blue',linestyle='-',label=label2)
+    if label == 'Train Loss': 
+        plt.title("Train and Val loss");plt.xlabel("Epochs");plt.ylabel("Loss")
+        plt.legend()
+        plt.savefig('./'+FIG_SAVE_DIR+'/train_val_loss_{:04d}.png'.format(current_epoch))
+        plt.close(fig1)
+    else:
+        plt.title("Train and Val Accuracy");plt.xlabel("Epochs");plt.ylabel("Acc")
+        plt.legend()
+        plt.savefig('./'+FIG_SAVE_DIR+'/train_val_acc_{:04d}.png'.format(current_epoch))
+        plt.close(fig1)
+
+def test():
+    """
+    Tests generator on the test set
+    :return:
+    """
+    # Load data
+    print 'Loading test data...'
+    with open(TEST_DATA_DIR, 'rb') as f:
+        test_data = pickle.load(f)
+    print '-->done!'    
+    model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],9,0.01,1e-05,0.01,0.2)
+    load_weights(net=model.net['output'], path='weights/gen_', epochtoload=15) 
+    bce_feedforward(model,test_data,bPrint=True)
 def train():
     """
     Train both generator and discriminator
@@ -154,7 +146,7 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open(TRAIN_DATA_DIR, 'rb') as f:
+    with open(TRAIN_DATA_DIR_CROSS, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
@@ -175,13 +167,13 @@ def train():
         # Load a pre-trained model
         #load_weights(net=model.net['output'], path="test_gen_only/gen_", epochtoload=10)
         # load_weights(net=model.discriminator['fc5'], path="test_dialted/disrim_", epochtoload=54)
-        salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=20,fig=True)
+        salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=20)
 
     elif flag == 'bce':
-        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],16,0.05,1e-5,0.99)
+        model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,1e-5,0.99)
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path='test/gen_', epochtoload=15)
-        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=20,fig=True)
+        bce_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=10)
     else:
         print "Invalid input argument."
 def cross_val(): 

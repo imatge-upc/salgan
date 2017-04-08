@@ -37,22 +37,20 @@ def predict(model, image_stimuli, num_epoch=None, name=None, path_output_maps=No
     blob[0, ...] = (image_stimuli.astype(theano.config.floatX).transpose(2, 0, 1))
 
     result = np.squeeze(model.predictFunction(blob))
-    saliency_map = result
-    #saliency_map = (result * 255).astype(np.uint8)
+    saliency_map = (result * 255).astype(np.uint8)
 
     # resize back to original size
-    #saliency_map = cv2.resize(saliency_map, size, interpolation=cv2.INTER_CUBIC)
+    saliency_map = cv2.resize(saliency_map, size, interpolation=cv2.INTER_CUBIC)
     # blur
     #saliency_map = cv2.GaussianBlur(saliency_map, (blur_size, blur_size), 0)
     # clip again
-    #saliency_map = np.clip(saliency_map, 0, 255)
-#    saliency_map = cv2.threshold(saliency_map,127,255,cv2.THRESH_BINARY)
+    saliency_map = np.clip(saliency_map, 0, 255)
 
     if name is None:
         # When we use for testing, there is no file name provided.
         cv2.imwrite('./' + path_output_maps + '/validationRandomSaliencyPred_{:04d}.png'.format(num_epoch), saliency_map)
     else:
-        cv2.imwrite(os.path.join(path_output_maps, name + '.bmp'), saliency_map)
-        np.save(os.path.join(path_output_maps, name), saliency_map)
+        cv2.imwrite(os.path.join(path_output_maps, name + '.png'), saliency_map)
+        np.save(os.path.join(path_output_maps, name), result)
 
 

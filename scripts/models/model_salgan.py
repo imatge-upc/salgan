@@ -49,7 +49,7 @@ class ModelSALGAN(Model):
 	
         test_prediction = lasagne.layers.get_output(self.net[output_layer_name], deterministic=True)
 	test_loss = lasagne.objectives.binary_crossentropy(test_prediction,self.output_var).mean()
-        test_acc = lasagne.objectives.binary_jaccard_index(test_prediction,self.output_var)
+        test_acc = lasagne.objectives.binary_jaccard_index(test_prediction,self.output_var).mean()
         self.G_valFunction = theano.function(inputs=[self.input_var, self.output_var],outputs=[test_loss,test_acc])
         self.predictFunction = theano.function([self.input_var], test_prediction)
 
