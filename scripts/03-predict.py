@@ -20,10 +20,10 @@ def test(path_to_images, path_output_maps, model_to_test=None):
 
 def main():
     # Create network
-    #model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],16,0.05,1e-5,0.99)
-    model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],9,0.01,1e-05,0.01,0.2)
+    model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,1e-5,0.99)
+    #model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],9,0.01,1e-05,0.01,0.2)
     # Here need to specify the epoch of model sanpshot
-    load_weights(model.net['output'], path="gan_weights/gen_", epochtoload=15)
+    load_weights(model.net['output'], path="bce_weights/gen_", epochtoload=10)
     # Here need to specify the path to images and output path
     test(path_to_images=pathToImages, path_output_maps=pathToResMaps, model_to_test=model)
 

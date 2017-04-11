@@ -84,10 +84,16 @@ def salgan_batch_iterator(model, train_data, validation_data,validation_sample,e
             n_updates += 1
         g_cost /= nr_batches_train
 	d_cost /= nr_batches_train
-	e_cost /= nr_batches_train
-
+	e_cost /= nr_batches_train	
 	#Compute the Jaccard Index on the Validation
 	v_cost, v_acc = bce_feedforward(model,validation_data,True)
+
+	if current_epoch % 5  == 0:
+            np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
+                     *lasagne.layers.get_all_param_values(model.net['output']))
+            np.savez('./' + DIR_TO_SAVE + '/disrim_modelWeights{:04d}.npz'.format(current_epoch),
+                     *lasagne.layers.get_all_param_values(model.discriminator['fc5']))
+            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, path_output_maps=FIG_SAVE_DIR)
     return v_acc
 
 def bce_feedforward(model, validation_data, bPrint=False):
@@ -146,7 +152,7 @@ def train():
     """
     # Load data
     print 'Loading training data...'
-    with open(TRAIN_DATA_DIR_CROSS, 'rb') as f:
+    with open(TRAIN_DATA_DIR, 'rb') as f:
         train_data = pickle.load(f)
     print '-->done!'
 
@@ -165,9 +171,9 @@ def train():
     if flag == 'salgan':
         model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1],9,0.01,1e-05,0.01,0.2)
         # Load a pre-trained model
-        #load_weights(net=model.net['output'], path="test_gen_only/gen_", epochtoload=10)
-        # load_weights(net=model.discriminator['fc5'], path="test_dialted/disrim_", epochtoload=54)
-        salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=20)
+        load_weights(net=model.net['output'], path="weights/gen_", epochtoload=15)
+        load_weights(net=model.discriminator['fc5'], path="weights/disrim_", epochtoload=15)
+        salgan_batch_iterator(model, train_data, validation_data,validation_sample.image.data,epochs=5)
 
     elif flag == 'bce':
         model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1],10,0.05,1e-5,0.99)

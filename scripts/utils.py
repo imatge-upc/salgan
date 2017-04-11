@@ -50,7 +50,7 @@ def predict(model, image_stimuli, num_epoch=None, name=None, path_output_maps=No
         # When we use for testing, there is no file name provided.
         cv2.imwrite('./' + path_output_maps + '/validationRandomSaliencyPred_{:04d}.png'.format(num_epoch), saliency_map)
     else:
-        cv2.imwrite(os.path.join(path_output_maps, name + '.png'), saliency_map)
-        np.save(os.path.join(path_output_maps, name), result)
+        cv2.imwrite(os.path.join(path_output_maps, name + '_unet.png'), saliency_map)
+        np.save(os.path.join(path_output_maps, name+'_unet'), result)
 
 

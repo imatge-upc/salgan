@@ -6,33 +6,61 @@ import glob
 from tqdm import tqdm
 from constants import *
 from sklearn.metrics import jaccard_similarity_score
-def evaluate():
+from sklearn.metrics import confusion_matrix
 
-    listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToResMaps,'*.png'))]
-    err = 0.
+def evaluate():
+    listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToImages,'test*.png'))]
     jaccard_score=0.
     dice = 0.
-    dice_err = 0.
+    spec = 0.
+    sens = 0.
+    acc = 0.
     for currFile in tqdm(listImgFiles):
-
 #        res = np.float32(cv2.imread(os.path.join(pathToResMaps,currFile+'.png'),cv2.IMREAD_GRAYSCALE))/255
-   	res = np.load(os.path.join(pathToResMaps,currFile+'.npy'))
-# 	res = cv2.normalize(res.astype('float'),None,0.0,1.0,cv2.NORM_MINMAX)
+   	res = np.load(os.path.join(pathToResMaps,currFile+'_gan.npy'))
 	gt = np.float32(cv2.imread(os.path.join(pathToMaps,currFile+'mask.png'),cv2.IMREAD_GRAYSCALE))/255
-	#print "Filename-->", currFile, " ResSize--> ", res.shape, "GtSize:--> ", gt.shape
-   	#pixelwise_err = np.sum((res-gt)**2)
-	jaccard_score += jaccard_similarity_coefficient(gt,res)
-        #dice += np.sum(res[gt==1])*2.0 / (np.sum(res) + np.sum(gt))
-	#pixelwise_err /= float(res.shape[0]*res.shape[1])
-        #err += pixelwise_err
 
-    #err /= len(listImgFiles)
-    #dice /= len(listImgFiles)
+	jaccard_score += jaccard_similarity_coefficient(gt,res)
+        dice += dice_coefficient(gt, res)
+      	spec_tmp, sens_tmp, acc_tmp = specificity_sensitivity(gt, res)
+     	spec += spec_tmp
+ 	sens += sens_tmp
+	acc += acc_tmp
+
+    dice /= len(listImgFiles)
     jaccard_score /= len(listImgFiles)
-    #print "Error: ", err
-    #print "Acc: ", 1-err
+    spec /= len(listImgFiles)
+    sens /= len(listImgFiles)
+    acc /= len(listImgFiles)
+    
+    print "Accuracy: ", acc
+    print "Sensitivity: ", sens
+    print "Specificity: ", spec
     print "Jaccard: ", jaccard_score
-    #print "Dice: ", dice
+    print "Dice: ", dice
+
+def dice_coefficient(gt, res):
+
+    A = gt.flatten()
+    B = res.flatten()
+    
+    A = np.array([1 if x > 0.5 else 0.0 for x in A])
+    B = np.array([1 if x > 0.5 else 0.0 for x in B])
+    dice = np.sum(B[A==1.0])*2.0 / (np.sum(B) + np.sum(A))
+    return dice
+def specificity_sensitivity(gt, res):
+    A = gt.flatten()
+    B = res.flatten()
+
+    A = np.array([1 if x > 0.5 else 0.0 for x in A])
+    B = np.array([1 if x > 0.5 else 0.0 for x in B])
+
+    tn, fp, fn, tp = np.float32(confusion_matrix(A, B).ravel())
+    specificity = tn/(fp + tn)
+    sensitivity = tp / (tp + fn)
+    accuracy = (tp+tn)/(tp+fp+fn+tn)
+
+    return specificity, sensitivity,accuracy
 
 def jaccard_similarity_coefficient(A, B, no_positives=1.0):
     """Returns the jaccard index/similarity coefficient between A and B.
