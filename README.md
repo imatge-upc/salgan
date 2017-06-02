@@ -1,4 +1,5 @@
 # SalGAN: Visual Saliency Prediction with Generative Adversarial Networks
+## CVPR 2017 Scene Understanding Workshop (SUNw)
 
 | ![Junting Pan][JuntingPan-photo]  | ![Cristian Canton Ferrer][CristianCanton-photo]  |  ![Kevin McGuinness][KevinMcGuinness-photo] | ![Noel O'Connor][NoelOConnor-photo] | ![Jordi Torres][JordiTorres-photo] |![Elisa Sayrol][ElisaSayrol-photo]  | ![Xavier Giro-i-Nieto][XavierGiro-photo]  |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -24,11 +25,12 @@ A joint collaboration between:
 
 | ![logo-insight] | ![logo-dcu] | ![logo-microsoft] |![logo-bsc] | ![logo-gpi] |
 |:-:|:-:|:-:|:-:|:-:|
-| [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web]|[Barcelona Supercomputing Center][bsc-web] | [UPC Image Processing Group][gpi-web] |
+| [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web] | [Facebook][facebook-web] [Barcelona Supercomputing Center][bsc-web] | [UPC Image Processing Group][gpi-web] |
 
 [insight-web]: https://www.insight-centre.org/ 
 [dcu-web]: http://www.dcu.ie/
 [microsoft-web]: https://www.microsoft.com/en-us/research/
+[facebook-web]: https://research.fb.com/category/applied-machine-learning/
 [bsc-web]: https://www.bsc.es/
 [upc-web]: http://www.upc.edu/?set_language=en
 [etsetb-web]: https://www.etsetb.upc.edu/en/ 
@@ -38,6 +40,7 @@ A joint collaboration between:
 [logo-insight]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/insight.jpg "Insight Centre for Data Analytics"
 [logo-dcu]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/dcu.png "Dublin City University"
 [logo-microsoft]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/logos/microsoft.jpg?token=AFOjyc8Q1kkjcWIP-yen0FTEo0lsWPk6ks5Yc3j4wA%3D%3D "Microsoft"
+[logo-facebook]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/master/logos/facebook.png
 [logo-bsc]: https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/junting/logos/bsc320x86.jpg?token=AFOjyWSHWWVvzTXnYh1DiFvH2VoWykA3ks5Yc6Q1wA%3D%3D
 [logo-upc]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/upc.jpg "Universitat Politecnica de Catalunya"
 [logo-etsetb]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/etsetb.png "ETSETB TelecomBCN"
@@ -57,7 +60,7 @@ The first stage of the network consists of a generator model whose weights are l
 
 ## Publication
 
-Find the pre-print version of our work on [arXiv](https://arxiv.org/abs/1701.01081).
+Find the extended pre-print version of our work on [arXiv](https://arxiv.org/abs/1701.01081). The shorter extended abstract presented as spotlight in the [CVPR 2017 Scene Understanding Workshop (SUNw)](http://sunw.csail.mit.edu/) is available [here](https://github.com/imatge-upc/saliency-salgan-2017/raw/master/papers/sunw-2017-abstract.pdf).
 
 ![Image of the paper](https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/master/figs/thumbnails.jpg)
 
