@@ -24,7 +24,7 @@
 A joint collaboration between:
 
 | ![logo-insight] | ![logo-dcu] | ![logo-microsoft] | ![logo-facebook] | ![logo-bsc] | ![logo-gpi] |
-|:-:|:-:|:-:|:-:|:-:|
+|:-:|:-:|:-:|:-:|:-:|:-:|
 | [Insight Centre for Data Analytics][insight-web] | [Dublin City University (DCU)][dcu-web] | [Microsoft][microsoft-web] | [Facebook][facebook-web]| [Barcelona Supercomputing Center][bsc-web] | [UPC Image Processing Group][gpi-web] |
 
 [logo-insight]: https://raw.githubusercontent.com/imatge-upc/saliency-2016-cvpr/master/logos/insight.jpg "Insight Centre for Data Analytics"
