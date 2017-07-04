@@ -103,7 +103,7 @@ def salgan_batch_iterator(model, train_data, validation_sample):
             np.savez('./' + DIR_TO_SAVE + '/gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
             np.savez('./' + DIR_TO_SAVE + '/disrim_modelWeights{:04d}.npz'.format(current_epoch),
-                     *lasagne.layers.get_all_param_values(model.discriminator['fc5']))
+                     *lasagne.layers.get_all_param_values(model.discriminator['prob']))
             predict(model=model, image_stimuli=validation_sample, numEpoch=current_epoch, pathOutputMaps=DIR_TO_SAVE)
         print 'Epoch:', current_epoch, ' train_loss->', (g_cost, d_cost, e_cost)
 
@@ -139,7 +139,7 @@ def train():
         model = ModelSALGAN(INPUT_SIZE[0], INPUT_SIZE[1])
         # Load a pre-trained model
         # load_weights(net=model.net['output'], path="nss/gen_", epochtoload=15)
-        # load_weights(net=model.discriminator['fc5'], path="test_dialted/disrim_", epochtoload=54)
+        # load_weights(net=model.discriminator['prob'], path="test_dialted/disrim_", epochtoload=54)
         salgan_batch_iterator(model, train_data, validation_sample.image.data)
 
     elif flag == 'bce':
