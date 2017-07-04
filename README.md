@@ -123,7 +123,7 @@ Our paper presents two convolutional neural networks, one correspends to the Gen
 
 SalGAN is implemented in [Lasagne](https://github.com/Lasagne/Lasagne), which at its time is developed over [Theano](http://deeplearning.net/software/theano/).
 ```
-pip install -r https://github.com/imatge-upc/saliency-salgan-2017/blob/junting/requirements.txt
+pip install -r https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/master/requirements.txt
 ```
 
 ### Usage
