@@ -1,5 +1,5 @@
 # SalGAN: Visual Saliency Prediction with Generative Adversarial Networks
-## CVPR 2017 Scene Understanding Workshop (SUNw)
+## [Spotlight at CVPR 2017 Scene Understanding Workshop (SUNw)](http://sunw.csail.mit.edu/)
 
 | ![Junting Pan][JuntingPan-photo]  | ![Cristian Canton Ferrer][CristianCanton-photo]  |  ![Kevin McGuinness][KevinMcGuinness-photo] | ![Noel O'Connor][NoelOConnor-photo] | ![Jordi Torres][JordiTorres-photo] |![Elisa Sayrol][ElisaSayrol-photo]  | ![Xavier Giro-i-Nieto][XavierGiro-photo]  |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
