@@ -35,7 +35,6 @@ nbformat==4.0.1
 networkx==1.11
 notebook==4.2.1
 numpy==1.11.0
-optpy==0.0.1
 pathlib2==2.1.0
 pexpect==4.1.0
 pickleshare==0.7.2
