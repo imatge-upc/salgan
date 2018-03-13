@@ -146,6 +146,10 @@ With the provided model weights you should obtain the follwing result:
 
 Download the pretrained VGG-16 weights from: [vgg16.pkl](https://s3.amazonaws.com/lasagne/recipes/pretrained/imagenet/vgg16.pkl)
 
+## External implementation in PyTorch
+
+Bat-Orgil Batsaikhan and Catherine Qi Zhao from the University of Minnesota released a [PyTorch implementation](https://github.com/batsa003/salgan/) in 2018 as part of their poster ["Generative Adversarial Network for Videos and Saliency Map"](https://conservancy.umn.edu/bitstream/handle/11299/194302/UROP_poster_batsa003.pdf?sequence=1).
+
 
 ## Acknowledgements
 
