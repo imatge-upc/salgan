@@ -126,6 +126,40 @@ SalGAN is implemented in [Lasagne](https://github.com/Lasagne/Lasagne), which at
 pip install -r https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017/master/requirements.txt
 ```
 
+### SalGAN on a docker
+
+I've made this Docker container with all necessary dependencies for running salgan.
+You'll need to use nvidia-docker (I don't know if this is installed in the server though).
+
+Using the container is like connecting via ssh to a machine. To start an interactive session run:
+
+```
+    >> sudo nvidia-docker run -it --entrypoint='bash' -w /home/ evamohe/salgan
+```
+
+This will open a terminal within the container located in the '/home' folder. 
+
+Yo will find Salgan code in "/home/salgan". So if you want to test the installation, within the container, run:
+
+```
+   >> cd /home/salgan/scripts
+   >> THEANO_FLAGS=mode=FAST_RUN,device=gpu0,floatX=float32,lib.cnmem=0.5,optimizer_including=cudnn python 03-predict.py
+```
+
+That will process the sample images located in "/home/salgan/images" and store them in "/home/salgan/saliency". To exit the container, run:
+
+```
+   >> exit
+```
+
+You migh want to process your own data with your own custom scripts. For that, you can mount different local folders in the container. For example:
+
+```
+>> sudo nvidia-docker run -v $PATH_TO_MY_CODE:/home/code -v $PATH_TO_MY_DATA:/home/data -it --entrypoint='bash' -w /home/
+```
+
+will open a new session in the container, with '/home/code' and '/home/data' folders that will be share with your computer. If you edit your code locally, the changes will be updated automatically in the container. Similarly, all the files generated in '/home/data' will be available in your original data folder.
+
 ### Usage
 
 To train our model from scrath you need to run the following command:
