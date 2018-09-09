@@ -128,8 +128,7 @@ pip install -r https://raw.githubusercontent.com/imatge-upc/saliency-salgan-2017
 
 ### SalGAN on a docker
 
-I've made this Docker container with all necessary dependencies for running salgan.
-You'll need to use nvidia-docker (I don't know if this is installed in the server though).
+We have prepared [this Docker container](https://hub.docker.com/r/evamohe/salgan/) with all necessary dependencies for computing saliency maps with SalGAN. You will need to use [nvidia-docker](https://github.com/NVIDIA/nvidia-docker).
 
 Using the container is like connecting via ssh to a machine. To start an interactive session run:
 
