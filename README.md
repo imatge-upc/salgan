@@ -5,7 +5,7 @@
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | [Junting Pan][JuntingPan-web]  | [Cristian Canton Ferrer][CristianCanton-web] | [Kevin McGuinness][KevinMcGuinness-web] | [Noel O'Connor][NoelOConnor-web] |  [Jordi Torres][JordiTorres-web] | [Elisa Sayrol][ElisaSayrol-web]  | [Xavier Giro-i-Nieto][XavierGiro-web]   |
 
-[JuntingPan-web]: https://www.linkedin.com/in/junting-pan
+[JuntingPan-web]: https://junting.github.io/
 [CristianCanton-web]: https://cristiancanton.github.io/
 [KevinMcGuinness-web]: https://www.insight-centre.org/users/kevin-mcguinness
 [JordiTorres-web]: jorditorres.org
