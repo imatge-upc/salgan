@@ -39,7 +39,7 @@ optpy==0.0.1
 pathlib2==2.1.0
 pexpect==4.1.0
 pickleshare==0.7.2
-Pillow==3.2.0
+Pillow==6.2.0
 pkg-resources==0.0.0
 protobuf==2.6.1
 ptyprocess==0.5.1
