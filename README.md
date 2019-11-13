@@ -118,7 +118,7 @@ Two different dataset were used for test:
 
 ## Software frameworks
 
-Our paper presents two convolutional neural networks, one correspends to the Generator (Saliency Prediction Network) and the another is the Discriminator for the adversarial training. To compute saliency maps only the Generator is needed.
+Our paper presents two convolutional neural networks, one corresponds to the Generator (Saliency Prediction Network) and the another is the Discriminator for the adversarial training. To compute saliency maps only the Generator is needed.
 
 ### SalGAN on Lasagne
 
