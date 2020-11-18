@@ -33,7 +33,7 @@ natsort==5.0.1
 nbconvert==4.2.0
 nbformat==4.0.1
 networkx==1.11
-notebook==4.2.1
+notebook==6.1.5
 numpy==1.11.0
 optpy==0.0.1
 pathlib2==2.1.0
