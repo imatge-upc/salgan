@@ -15,7 +15,7 @@ functools32==3.2.3.post2
 h5py==2.6.0
 hdf5storage==0.1.14
 ipykernel==4.3.1
-ipython==4.2.0
+ipython==7.16.3
 ipython-genutils==0.1.0
 ipywidgets==5.1.5
 Jinja2==2.8
